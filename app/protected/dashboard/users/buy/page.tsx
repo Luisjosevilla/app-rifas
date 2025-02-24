@@ -2,7 +2,10 @@ import React from 'react'
 
 function Page() {
   return (
-    <div>buy</div>
+    <section className='flex flex-row gap-4 '>
+      <div className='basis-1/2'></div>
+      <div className='basis-1/2'></div>
+    </section>
   )
 }
 

@@ -45,7 +45,7 @@ async function Page() {
         <Card className="w-full md:basis-1/4 bg-background">
           <CardHeader>
             <CardTitle>Tickets Verificados</CardTitle>
-            <CardDescription>Tickets disponibles</CardDescription>
+            <CardDescription>Tickets validados</CardDescription>
           </CardHeader>
           <CardContent>
           <span className='text-3xl font-bold text-primary '>{0}</span>
