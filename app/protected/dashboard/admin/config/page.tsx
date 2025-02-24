@@ -16,7 +16,6 @@ import { redirect } from 'next/navigation'
 async function Page() {
   const getData = await fetch(`${process.env.URL}/api/admin/settings`,{method:"GET"})
   let data = await  getData.json()
-  console.log(data?.settings[0]?.payment_method)
  
   async function update(e:FormData){
     "use server";
@@ -32,9 +31,6 @@ async function Page() {
       revalidatePath("/protected/dashboard/admin/config")
 
   }
- 
-  
-
   async function update2(e:FormData){
     "use server";
     const getres = await fetch(`${process.env.URL}/api/admin/settings/newMethod`,{
