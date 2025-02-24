@@ -8,10 +8,10 @@
 
 .ctaPath {
     display: flex;
-    padding: 10px 45px;
+    padding: 10px 36px;
     text-decoration: none;
     font-family: 'Poppins', sans-serif;
-    font-size: 40px;
+    font-size: 30px;
     color: white;
     background: rgb(0, 92, 128);
     transition: 1s;

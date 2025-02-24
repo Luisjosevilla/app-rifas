@@ -22,6 +22,9 @@ import moto3 from "./public/moto3.jpg"
 import { Play } from "lucide-react";
 import Timer from "../components/Timer";
 
+const getDataAdmin=()=>{
+  const get= fetch("/")
+}
 
 export default async function Home() {
   return (
@@ -104,7 +107,7 @@ export default async function Home() {
           </div>
       
           <div className="rounded-3xl flex flex-col gap-8 w-full h-fit  py-10 p-4 bg-primary items-center justify-items-center">
-          <h3 className="text-white text-2xl font-bold">¡SE ACABA EL TIEMPO!</h3>
+          <h3 className="text-white text-2xl font-bold text-center">¡SE ACABA EL TIEMPO!</h3>
           <Timer now={new Date().toUTCString()}/>
           <span className="text-md opacity-70 text-center text-primary-foreground ">La rifa se llevara acabo el (fecha), si deseas participar registrate antes de que se acabe el tiempo. Podras mantenerte informado en tiempo real del estado de la rifa a través de tu cuenta o nuestras redes sociales.</span>
           

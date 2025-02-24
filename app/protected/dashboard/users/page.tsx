@@ -30,12 +30,15 @@ async function Page() {
   
   return (
     <section className='flex flex-col gap-6 w-full items-center '>
-       <h1 className='px-28  font-bold text-4xl text bg-background-primary w-full text-left'>Inicio</h1>
+      <div className='flex items-star justify- w-full'>
+      <h1 className='px-28  font-bold text-4xl text bg-background-primary w-fit text-start'>Inicio</h1>
+      </div>
+       
         <div className='flex flex-col md:flex-row gap-4 w-full items-center justify-center '>
         <Card className="w-full md:basis-1/4 bg-background">
           <CardHeader>
             <CardTitle>Tickets comprados</CardTitle>
-            <CardDescription>Numero de usuarios registrados</CardDescription>
+            <CardDescription>Numero de tickets comprados</CardDescription>
           </CardHeader>
           <CardContent>
             <span className='text-3xl font-bold text-primary '>{0}</span>
@@ -71,7 +74,7 @@ async function Page() {
             <Image src={moto1} width={200} height={200} alt='moto' className='basis-1/4 rounded-lg '/>
             <div className='flex flex-col gap-4 items-start justify-start'>
               <h2 className='text-primary text-3xl font-bold'>MOTO RK200</h2>
-              <p className='w-3/4'>Texto para promocionar la rifa y provocar que el usuario quiera comprar mas </p>
+              <p className='w-3/4 text-primary font-bold'>Texto para promocionar la rifa y provocar que el usuario quiera comprar mas </p>
               <AnimateButton />
             </div>
           </div>
