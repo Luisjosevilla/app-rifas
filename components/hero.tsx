@@ -1,44 +1,44 @@
-import NextLogo from "./next-logo";
-import SupabaseLogo from "./supabase-logo";
+"use client"
+
+import Image from "next/image";
+import Altar from "./Altar";
+import moto300 from "./../app/public/moto300X300.png"
+import moto600 from "./../app/public/moto600X600.png"
+import Link from "next/link";
+import AnimateButton from "./Animate-button";
 
 export default function Header() {
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
+    <div className="relative flex flex-col md:flex-row gap-4  justify-start items-center w-full h-[90dvh] bg-background "  >
+      <div className="w-full h-full bg-gradient-to-t  from-primary from-1% via-transparent via-15% to-transparent to-90% absolute  "></div>
+      <div className="w-full h-full bg-gradient-to-b  from-primary from-1% via-transparent via-35% to-transparent to-90% absolute  "></div>
+      <div className="absolute top-0  w-full h-full overflow-hidden ">
+        <div className='lightDiv x1div'></div>
+        <div className='lightDiv x2div'></div>
+        <div className='lightDiv x3div'></div>
+        <div className='lightDiv x4div'></div>
+        <div className='lightDiv x5div'></div>
+        <div className='lightDiv x6div'></div>
+        <div className='lightDiv x7div'></div>
+        <div className='lightDiv x8div'></div>
+        <div className='lightDiv x9div'></div>
       </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
-      </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
+      
+      <div className="basis-1/2 h-fit flex flex-col gap-6 items-center justify-center relative z-10">
+        <h1 className="font-sans text-primary-foreground md:text-primary  text-center md:text-8xl text-6xl font-black ">GRAN RIFA</h1>
+        <span className="text-2xl font-bold text-foreground text-center">No esperes más y ganate tu moto.</span>
+        <AnimateButton/>
+      </div>
+      <div className="basis-1/2 h-full w-full relative z-10 flex items-end">
+        <Altar className="absolute -bottom-[16vh] md:-bottom-[24vh] lg:-bottom-[34vh] w-full h-full md:h-3/4"/>
+        <div className="flex items-center justify-center w-full md:h-fit ">
+        <Image alt="moto" src={moto300} width={300} height={300} className="lg:hidden flex " style={{filter:"drop-shadow(0 10px 5px black)"}}></Image>
+        </div>
+        <Image alt="moto" src={moto600} width={600} height={600} className="hidden lg:flex md:left-0 left-[12%] -bottom-[24vh] z-100 absolute" style={{filter:"drop-shadow(0 10px 5px black)"}}></Image>
+    
+
+      </div>
+      
     </div>
   );
 }

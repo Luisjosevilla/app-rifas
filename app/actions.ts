@@ -8,6 +8,8 @@ import { redirect } from "next/navigation";
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
+  const name = formData.get("name")?.toString();
+  const phone = formData.get("phone")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -19,21 +21,36 @@ export const signUpAction = async (formData: FormData) => {
     );
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { data,error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${origin}/auth/callback`,
     },
   });
+  
 
   if (error) {
     console.error(error.code + " " + error.message);
     return encodedRedirect("error", "/sign-up", error.message);
   } else {
+    
+      const {  error } = await supabase
+      .from('profile')
+      .insert([
+        { user_id:data.user?.id,rol:"user",name,phone,ntickets:[""], address:"" },
+      ])
+      .select()
+
+      if (error) {
+        console.error(error.code + " " + error.message);
+        return encodedRedirect("error", "/sign-up", error.message);
+      }
+        
+
     return encodedRedirect(
       "success",
-      "/sign-up",
+      "/sign-in",
       "Thanks for signing up! Please check your email for a verification link.",
     );
   }
@@ -53,7 +70,7 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  return redirect("/protected");
+  return redirect("/protected/dashboard/users");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -132,3 +149,4 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
