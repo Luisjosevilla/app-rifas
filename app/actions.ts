@@ -202,7 +202,9 @@ export const selectMethod= async (formData:FormData) => {
   const number = formData.get("number") 
   const transferencia = formData.get("transferencia") 
   const file = formData.get("file") 
-
+  const terms = formData.get("terms") 
+  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
+ 
   if(!(Number(number)>=4)){
     encodedRedirect(
       "error",
@@ -224,6 +226,9 @@ export const selectMethod= async (formData:FormData) => {
       `Capture es requerido.`,
     );
   }
+  if(!terms){
+    return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="Aceptar los terminos y condiciones"`) 
+  }
  
   const url = 'https://upload.imagekit.io/api/v2/files/upload';
   const form = new FormData();
@@ -237,7 +242,6 @@ export const selectMethod= async (formData:FormData) => {
     headers: {Accept: 'application/json', Authorization: `Basic ${auth}`}
   };
 
- const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
    
   try {
     const response = await fetch(url, options);
