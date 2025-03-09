@@ -26,7 +26,7 @@ export default function Header() {
       
       <div className="basis-1/2 h-fit flex flex-col gap-6 items-center justify-center relative z-10">
         <h1 className="font-sans text-primary-foreground md:text-primary  text-center md:text-8xl text-6xl font-black ">GRAN RIFA</h1>
-        <span className="text-2xl font-bold text-foreground text-center">No esperes más y ganate tu moto.</span>
+        <span className="md:text-2xl text-lg font-bold text-foreground text-center">No esperes más y se el ganador de cualquiera de nuestros 7 premios, participa y gana.</span>
         <AnimateButton/>
       </div>
       <div className="basis-1/2 h-full w-full relative z-10 flex items-end">

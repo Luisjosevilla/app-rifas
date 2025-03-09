@@ -30,7 +30,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           placeholder="tu contraseña"
           required
         />
-        <SubmitButton pendingText="Signing In..." formAction={signInAction}>
+        <SubmitButton pendingText="Iniciando..." formAction={signInAction}>
           Iniciar sesión
         </SubmitButton>
         <p className="text-sm text-foreground">

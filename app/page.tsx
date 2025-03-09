@@ -1,24 +1,24 @@
 import Hero from "@/components/hero";
-import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
-import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
-import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { SubmitButton } from "../components/submit-button";
 import Link from "next/link";
 import Wsp from "../components/Wsp";
 import Redes from "../components/Redes";
+import CarouselInfinite from "../components/Carousel";
 import { EnvVarWarning } from "../components/env-var-warning";
 import HeaderAuth from "../components/header-auth";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../components/ui/carousel";
-import { Badge } from "../components/ui/badge";
-import { Progress } from "../components/ui/progress";
+import moto300 from "./../app/public/moto300X300.png"
 import Image from "next/image";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
 import moto1 from "./public/moto1.jpg"
 import moto2 from "./public/moto2.jpg"
 import moto3 from "./public/moto3.jpg"
+import redes from "./public/redes.png"
+import tickets from "./public/tickets.png"
+import bolsa from "./public/bolsa.png"
 import { Play } from "lucide-react";
 import Timer from "../components/Timer";
 
@@ -40,21 +40,66 @@ export default async function Home() {
       <main className="flex flex-col w-full items-center w-full">
         <Hero />
         <section className="flex-1 flex w-full h-fit items-center justify-center flex-col gap-8 p-10">
+          <div className="w-full h-fit mt-[12vh] flex flex-col gap-6 items-center">
+            <h2 className="w-fit h-fit text-3xl font-bold text-primary text-center">GANA ALGUNO DE LOS SIGUIENTES PREMIOS </h2>
+            <div className="w-full h-fit flex items-center justify-center p-6">
+            <Carousel className="w-full max-w-md" >
+                  <CarouselContent >
+                    {[{img:moto300,title:"PRIMER LUGAR",premio:"MOTO RK200",info:"El primer premio se determinara por los números que salgan en la lotería del Kino Táchira Super Gana, a las 10pm."}, 
+                    {img:bolsa,title:"SEGUNDO LUGAR",premio:"300$",info:"El segundo premio se determinara por los números que salgan en la lotería del Kino Táchira Super Gana, a las 7pm."},
+                    {img:bolsa,title:"PREMIO ADICIONAL: 7777",premio:"100$",info:"Si te sale el numero 7777 al momento de tu compra, Ganaras de forma inmediata un premio de 100$ y podras seguir participando por los demás premios."},
+                    {img:bolsa,title:"PREMIO ADICIONAL: 3333",premio:"100$",info:"Si te sale el numero 3333 al momento de tu compra, Ganaras de forma inmediata un premio de 100$ y podras seguir participando por los demás premios."},
+                    {img:bolsa,title:"PREMIO ADICIONAL: 8888",premio:"100$",info:"Si te sale el numero 8888 al momento de tu compra, Ganaras de forma inmediata un premio de 100$ y podras seguir participando por los demás premios."},
+                    {img:tickets,title:"MAYOR CANTIDAD DE TICKETS",premio:"250$",info:"La persona con más tickets comprados obtendrá un premio de $250."},
+                    {img:redes,title:"COMPARTE Y GANA",premio:"50$",info:" ¡Estarás participando por $50! Mientras más compartas, ¡más oportunidades tendrás de ganar!."}
+                    ].map((item, index) => (
+                      <CarouselItem key={index}>
+                        <div className="p-1">
+                          
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-xl font-bold">{item?.title}</CardTitle>
+                              <span className="text-foreground text-md  opacity-80">{item.info}</span>
+                            </CardHeader>
+                            <CardContent className="flex flex-col gap-4 aspect-square items-center justify-center ">
+                              <div className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 min-w-[300px] min-h-[300px] shadow-xl border-gray-100/40 p-4">
+                                <span className="animate-pulse text-4xl font-bold text-foreground text-center">{item.premio}</span>
+                                <div key={index} className='relative w-[200px] h-[200px]  '>
+                                {item?.img && <Image alt='moto primer premio' width={300} height={300} src={item.img} className='w-full h-full'/>}
+                                </div>
+                              </div>
+                              
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
+            </div>
+            
+          </div>
+          <div className="rounded-3xl flex flex-col gap-8 w-full h-fit  py-10 p-4 bg-primary items-center justify-items-center">
+          <h3 className="text-white text-4xl font-bold text-center animate-pulse">¡2 TICKETS X 1$! 👀</h3>
+          
+          <span className="text-xl opacity-70 text-center text-primary-foreground ">¡Podrás ser el ganador de cualquiera de esos GRANDIOSOS PREMIOS🎁!</span>
+          
+          <Link href={"/login"} className="text-foreground bg-background w-fit h-fit py-2 px-4 font-bold rounded-lg hover:scale-105 "> PARTICIPA YA</Link>
+          </div>
+
+          
           <div className="flex flex-col gap-4  mt-16 w-full h-fit items-center justify-center relative ">
-             <h2 className="w-fit h-fit text-3xl font-bold text-primary">DETALLES DE LA RIFA</h2>
+             <h2 className="w-fit h-fit text-3xl font-bold text-primary text-center">DETALLES DEL PRIMER PREMIO</h2>
              <Card className="w-full md:w-[650px]">
               <CardHeader>
-                <CardTitle>MOTO RK200</CardTitle>
+                <CardTitle className="flex flex-col gap-2">PRIMER PREMIO <span className="animate-pulse text-3xl">MOTO RK200</span></CardTitle>
                 <CardDescription>No esperes más, participa y gana una maravillosa moto RK200</CardDescription>
-                <span>Porcentaje de boletos ventidos</span>
-                <Progress value={33} />
-
+              
+              
               </CardHeader>
               <CardContent className="flex flex-col gap-4 items-center justify-center">
-                <div className="flex flex-row w-full justify-between">
-                  <Badge>24/05/2025</Badge>
-
-                </div>
               
               <Carousel className="w-full max-w-xs">
                   <CarouselContent>
@@ -101,15 +146,15 @@ export default async function Home() {
               </CardContent>
               <CardFooter className="flex justify-between">
                 <div/>
-                <Button>Comprar</Button>
+                <Button>PARTICIPA YA</Button>
               </CardFooter>
             </Card>
           </div>
       
           <div className="rounded-3xl flex flex-col gap-8 w-full h-fit  py-10 p-4 bg-primary items-center justify-items-center">
-          <h3 className="text-white text-2xl font-bold text-center">¡SE ACABA EL TIEMPO!</h3>
-          <Timer now={new Date().toUTCString()}/>
-          <span className="text-md opacity-70 text-center text-primary-foreground ">La rifa se llevara acabo el (fecha), si deseas participar registrate antes de que se acabe el tiempo. Podras mantenerte informado en tiempo real del estado de la rifa a través de tu cuenta o nuestras redes sociales.</span>
+          <h3 className="text-white text-3xl font-bold text-center">¡SE ACABA EL TIEMPO!</h3>
+          
+          <span className="text-xl opacity-70 text-center text-primary-foreground ">La rifa se llevara acabo con la Lotería del kino Táchira Super Gana, si deseas participar, registrate antes de que se acabe el tiempo. Podras mantenerte informado en tiempo real del estado de la rifa a través de tu cuenta o nuestras redes sociales.</span>
           
           <Link href={"/login"} className="text-foreground bg-background w-fit h-fit py-2 px-4 font-bold rounded-lg hover:scale-105 "> PARTICIPA YA</Link>
           </div>
@@ -118,7 +163,7 @@ export default async function Home() {
           <h3 className="text-primary text-3xl font-bold text-center">CONTACTANOS EN NUESTRAS REDES SOCIALES</h3>
           <Redes/>
           </div>
-          <Link href={"https://api.whatsapp.com/send?phone=584128220099&text=hola"} target={"_blank"} className="fixed bottom-2 right-2 w-[120px] h-[120px] z-20  ">
+          <Link href={"https://api.whatsapp.com/send?phone=584244431231&text=Hola, quiero obtener mas información de la gran rifa"} target={"_blank"} className="fixed bottom-4 right-4 md:right-2 md:bottom-2 md:w-[120px] md:h-[120px] h-20 w-20 z-20  ">
 
                   <Wsp className="w-full  h-full hover:scale-105 cursor-pointer " style={{filter:"drop-shadow(0 10px 15px black)"}}/>
           </Link>

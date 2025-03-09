@@ -29,12 +29,17 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --no-of-slides: 6;
+    --slides-in-view: 4;
+    --slide-width: 30vw;
+    --slide-height: 30vw;
+    --iteration-time: 10s;
   }
 
   .dark {
     --background:204.71 37.78% 8.82%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 207 80% 15%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -56,6 +61,11 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --no-of-slides: 6;
+    --slides-in-view: 4;
+    --slide-width: 300px;
+    --slide-height: 300px;
+    --iteration-time: 50s;
   }
 }
 
@@ -230,4 +240,50 @@ left: 85%;
 75%{opacity: 1;}
 100%{top: -100vh; opacity: 0;}
 }
+
+@keyframes scrollCarousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(var(--slide-width) * var(--no-of-slides)* -1));
+  }
+}
+
+.carousel__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  overflow: hidden;
+  margin: 0 auto;
+  gap:4rem;
+}
+
+.carousel {
+  padding: 10px 0;
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+}
+
+.carousel__slide {
+  animation: scrollCarousel var(--iteration-time) linear infinite;
+  display: flex;
+  flex-direction: column;
+  background-color: aquamarine;
+  flex: 0 0 auto;
+  width: var(--slide-width);
+  height: var(--slide-height);
+  box-sizing: border-box;
+}
+
+.carousel__image {
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 50%;
+  width: 100px;
+  margin: 15px 20px;
+}
+
 

@@ -28,7 +28,7 @@ async function Page() {
           }
       }
     const getData = await fetch(`${process.env.URL}/api/admin/getData`,{method:"GET"})
-      const data = await  getData.json()
+      const data = await  getData?.json()
   return (
     <section className='flex flex-col gap-6 w-full'>
        <h1 className='px-28  font-bold text-4xl text-slate-700'>Inicio</h1>
@@ -46,7 +46,7 @@ async function Page() {
         <Card className="w-full md:basis-1/4">
           <CardHeader>
             <CardTitle>Tickets </CardTitle>
-            <CardDescription>Tickets disponibles</CardDescription>
+            <CardDescription>Tickets totales</CardDescription>
           </CardHeader>
           <CardContent>
           <span className='text-3xl font-bold text-primary '>{data?.tickets}</span>
@@ -60,7 +60,7 @@ async function Page() {
             <CardDescription>Tickets Vendidos</CardDescription>
           </CardHeader>
           <CardContent>
-          <span className='text-3xl font-bold text-primary '>{1000-data?.tickets}</span>
+          <span className='text-3xl font-bold text-primary '>{data?.tickets-data?.ticketsDisponibles}</span>
           </CardContent>
         </Card>
         </div>
