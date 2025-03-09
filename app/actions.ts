@@ -4,6 +4,8 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import ImageKit from "imagekit"
+import fs from "fs"
 const getprice=async ()=>{
 
   const getTasa= await fetch("https://ve.dolarapi.com/v1/dolares/paralelo",{method:"GET"})
@@ -16,6 +18,12 @@ const getprice=async ()=>{
   return {price: settings[0].price, tasa:resTasa.promedio+1,monto:2 }
       
 }
+
+const imagekit = new ImageKit({
+  publicKey: process.env.NEXT_PUBLIC_KEY_imagekit!,
+  privateKey: process.env.APIKEY_imagekit!,
+  urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT!,
+});
 const getNumbers= async (number:number)=>{
   "use server"
  
@@ -201,7 +209,7 @@ export const selectMethod= async (formData:FormData) => {
   const method = formData.get("method") 
   const number = formData.get("number") 
   const transferencia = formData.get("transferencia") 
-  const file = formData.get("file") 
+  const file = formData.get("file") as File; 
   const terms = formData.get("terms") 
   const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
  
@@ -230,25 +238,35 @@ export const selectMethod= async (formData:FormData) => {
     return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="Aceptar los terminos y condiciones"`) 
   }
  
-  const url = 'https://upload.imagekit.io/api/v2/files/upload';
-  const form = new FormData();
-  form.append('file', file);
-  form.append('fileName', `capture${Math.round(Math.random())*1000000}`);
-  const auth= Buffer.from(process.env.APIKEY_imagekit??"").toString("base64"); 
-  console.log("auth",process.env.APIKEY_imagekit)
-  const options = {
-    body:form,
-    method: 'POST',
-    headers: {Accept: 'application/json', Authorization: `Basic ${auth}`}
-  };
+  
+
 
    
   try {
-    const response = await fetch(url, options);
-    const data = await response.json();
-    console.log(data)
-    return redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&img=${data.url}&step=register`)
-  } catch (error) {
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    fs.readFile(buffer, function(err, data) {
+      console.log("error",err)
+      console.log("data",data)
+      if (err) throw err; // Fail if the file can't be read.
+      imagekit.upload({
+        file : data, //required
+        fileName : `capture${Math.round(Math.random()*10000)}.jpg`, 
+      }, function(error, result) {
+        if(error){ 
+          
+          redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error al subir imagen intente de nuevo"`);
+
+        }else if(result){
+          return redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&img=${result.url}&step=register`)
+        }else{
+          redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`);
+        }
+      });
+    });
+ } catch (error) {
+  console.log("error")
     return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
   }
 
