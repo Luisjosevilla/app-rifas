@@ -42,6 +42,7 @@ async function Page(props: {
         <span className="text-xs text-center">Los números son otorgados de forma totalmente  aleatoria previa confirmación del pago, recuerda que si te sale alguno de los siguientes numeros: 7777, 3333 y 8888. Obtendras un premio que será entregado de manera inmediata al ganador. MUCHA SUERTE!</span>
         <div className="absolute  top-0 -right-full">
           <Input name="user"  defaultValue={user?.id} />
+          <Input name="monto"  defaultValue={searchParams.monto} />
         </div>
          
          <table className="table-auto gap-2 ">

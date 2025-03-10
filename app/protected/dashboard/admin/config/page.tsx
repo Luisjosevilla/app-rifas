@@ -43,10 +43,9 @@ async function Page() {
   }
   async function update3(e:FormData){
     "use server";
-    console.log(e)
     const getres = await fetch(`${process.env.URL}/api/admin/settings/editMethod`,{
       method:"POST",
-      body:JSON.stringify({id:e.get("id"), name:e.get("name"),info:e.get("info")})})
+      body:JSON.stringify({id:e.get("id"), name:e.get("name"),currency:e.get("currency"),info:e.get("info")})})
       let res= await  getres.json()
 
       if(getres.status!=200){
@@ -90,6 +89,12 @@ async function Page() {
             <Input name="name"  className="w-full" />
           </div>
           <div className="flex flex-col  gap-4">
+            <Label htmlFor="name" className="text-left text-lg font-bold">
+              Moneda
+            </Label>
+            <Input name="currency"  className="w-full" />
+          </div>
+          <div className="flex flex-col  gap-4">
             <Label htmlFor="info" className="text-left text-lg font-bold">
               Información
             </Label>
@@ -113,6 +118,10 @@ async function Page() {
               <div className='flex flex-col gap-2'>
                 <Label>Nombre</Label>
                 <Input name="name" defaultValue={item?.name}/>
+              </div>
+              <div className='flex flex-col gap-2'>
+                <Label>Moneda</Label>
+                <Input name="name" defaultValue={item?.currency}/>
               </div>
               <div className='flex flex-col gap-2'>
                 <Label>Información</Label>

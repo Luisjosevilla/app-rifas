@@ -55,7 +55,7 @@ export default async function AuthButton() {
 
       <div className="flex w-fit h-fit justify-end items-center">
           <Sheet>
-          <SheetTrigger><Menu className="hover:scale-95 hover:opacity-80 w-10 h-10 p-2 rounded-lg bg-neutral-200"/></SheetTrigger>
+          <SheetTrigger><Menu className="hover:scale-95 hover:opacity-80 w-10 h-10 p-2 rounded-lg bg-background"/></SheetTrigger>
           <SheetContent className="flex gap-10 flex-col">
             <DialogTitle className="text-primary font-bold">Menu</DialogTitle>
               <div className="flex flex-col h-full gap-4 justify-between">

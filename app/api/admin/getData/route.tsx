@@ -43,6 +43,6 @@ for (let index = 0; index < 10; index++) {
         
           
 
-  return NextResponse.json({users: profile?.length, tickets:count, payments, ticketsDisponibles:ticketsDisponibles.length})
+  return NextResponse.json({users: profile?.length, tickets:count, payments, ticketsDisponibles:ticketsDisponibles.length},{status:200})
 }
 

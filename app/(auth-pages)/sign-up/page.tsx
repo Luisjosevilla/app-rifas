@@ -153,11 +153,15 @@ export default async function Signup(props: {
           </button>}
           {  searchParams.monto?
           <div className="flex flex-col items-start border-2 border-primary/40 p-2 w-fit h-fit rounded-lg ">
-            <h3 className="text-xl font-bold text-foreground">Total a pagar: {searchParams.monto} Bs</h3>
+             <h3 className="text-xl font-bold text-foreground">Total a pagar: {searchParams.monto} {methods?.find((i)=>i.name == searchParams.method).currency}</h3>
             <div className="flex flex-col">
               <span className="text-md font-bold">{searchParams.method}</span>
               <div className="w-[300px] flex flex-col">{methods?.find((i)=>i.name == searchParams.method).info.split("/").map((item:any,i:number)=>{
-                return( <span className=" flex flex-row" key={i}>{item}</span>)
+                return( <span className=" flex flex-row" key={i}>
+                 
+                  {item}
+                  
+                  </span>)
               })}
               </div> 
             </div>

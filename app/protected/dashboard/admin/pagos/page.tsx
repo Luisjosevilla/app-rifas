@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../../../../../components/ui/table'
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../../../../../components/ui/pagination'
+import Link from 'next/link';
 
 async function Page({
   params,
@@ -26,7 +27,7 @@ async function Page({
     console.log(paginatedData)
   return (
     <section className='flex flex-col gap-6 w-full p-10'>
-    <h1 className='px-28  font-bold text-4xl text-slate-700'>Pagos</h1>
+    <h1 className='px-28  font-bold text-4xl text-primary'>Pagos</h1>
     <Table >
             <TableCaption>
               
@@ -37,15 +38,18 @@ async function Page({
                   <TableHead className="font-medium text-center min-w-[200px]">Usuario</TableHead>
                   <TableHead className="font-medium min-w-[150px] text-center">Numeros</TableHead>
                   <TableHead className="font-medium min-w-[150px] text-center">Estado</TableHead>
+                  <TableHead className="font-medium min-w-[150px] text-center">Detalles</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody className='cursor-pointer'>
+              <TableBody>
                {paginatedData?.map((items:any,index:number)=>{
-                return  <TableRow key={index}>
+                return  <TableRow key={index} >
                 <TableCell className="font-medium min-w-[200px] text-center">{items.id}</TableCell>
                 <TableCell className="font-medium  text-center">{items.user}</TableCell>
                 <TableCell className="font-medium min-w-[150px] text-center">{items.numbers.length}</TableCell>
-                <TableCell className="font-medium min-w-[150px] text-center">{items.status}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center">{items.status?"Validado":"Por validar"}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center"><Link className='px-4 p-2 rounded-lg bg-primary/50 text-white font-bold' href={`/protected/dashboard/admin/pagos/verify/${items?.id}`}>Ver</Link></TableCell>
+              
               </TableRow>
                })}
               </TableBody>

@@ -49,7 +49,7 @@ async function Page() {
             <CardDescription>Tickets totales</CardDescription>
           </CardHeader>
           <CardContent>
-          <span className='text-3xl font-bold text-primary '>{data?.tickets}</span>
+          <span className='text-3xl font-bold text-primary '>{data?.ticketsDisponibles}</span>
          
           </CardContent>
           
@@ -64,12 +64,12 @@ async function Page() {
           </CardContent>
         </Card>
         </div>
-        <div className='flex flex-col  gap-4 w-full bg-neutral-100 rounded-lg items-center justify-center p-4'>
+        <div className='flex flex-col  gap-4 w-full rounded-lg items-center justify-center p-4'>
         <div className='relative flex items-center justify-center w-full'>
-          <h2 className='text-2xl font-bold text-slate-700 relative'>Historial de pagos</h2> 
+          <h2 className='text-2xl font-bold text-foreground relative'>Historial de pagos</h2> 
           <Link href={"/protected/dashboard/admin/pagos?page=0"} className='absolute right-0 md:right-10 p-2 w-fit h-fit rounded-lg text-md bg-primary text-white font-bold'>Ver Todos</Link>
         </div>
-        <Table >
+        <Table  className=''>
         <TableCaption>
           
         </TableCaption>
@@ -84,10 +84,10 @@ async function Page() {
           <TableBody className='cursor-pointer'>
            {data.payments.map((items:any,index:number)=>{
             return  <TableRow key={index}>
-            <TableCell className="font-medium min-w-[200px] text-center">{items.id}</TableCell>
-            <TableCell className="font-medium  text-center">{items.user}</TableCell>
-            <TableCell className="font-medium min-w-[150px] text-center">{items.nmbers.length}</TableCell>
-            <TableCell className="font-medium min-w-[150px] text-center">{items.status}</TableCell>
+            <TableCell className="font-medium min-w-[200px] text-center">{items?.id}</TableCell>
+            <TableCell className="font-medium  text-center">{items?.user}</TableCell>
+            <TableCell className="font-medium min-w-[150px] text-center">{items?.numbers?.length}</TableCell>
+            <TableCell className="font-medium min-w-[150px] text-center">{items?.status?"Validado":"Por validar"}</TableCell>
           </TableRow>
            })}
           </TableBody>

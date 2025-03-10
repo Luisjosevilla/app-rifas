@@ -86,7 +86,20 @@ export const signUpAction = async (formData: FormData) => {
       if(errorpayments ){
         return encodedRedirect("error", "/sign-up", errorpayments.message);
       }
-        
+      if (payment){
+        for (let index = 0; index < payment[0].numbers.length; index++) {
+          const element = payment[0].numbers[index];
+          const { data:tickets, error } = await supabase
+          .from('tickets')
+          .update({ "status": 'no disponible' })
+          .eq('number', element)
+          .select()
+          if(error)return redirect(`/protected/dashboard/admin/pagos/verify/id?error="error del servidor intente de nuevo"`) 
+          
+        }
+        return redirect(`/protected/dashboard/users/?buy=Compra Exitosa!`)
+  
+      } 
 
       const { error:errorsignin } = await supabase.auth.signInWithPassword({
           email,
@@ -213,7 +226,7 @@ export const seeMonto = async (formData:FormData) => {
     ); 
   }
 
-  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
+  const monto = methods[0].currency=="BS"?(Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2):(Number(number)*(await getprice())?.price).toFixed(2)
   return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}`) 
 };
 
@@ -240,7 +253,7 @@ export const seeMontoUser = async (formData:FormData) => {
     ); 
   }
 
-  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
+  const monto = methods[0].currency=="BS"?(Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2):(Number(number)*(await getprice())?.price).toFixed(2)
   return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}`) 
 };
 export const selectMethod= async (formData:FormData) => {
@@ -317,7 +330,7 @@ export const comprarUser= async (formData:FormData) => {
   const transferencia = formData.get("transferencia") 
   const file = formData.get("file") 
   const terms = formData.get("terms") 
-  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
+  const monto = formData.get("monto") 
   const user = formData.get("user") 
   if(!(Number(number)>=4)){
     encodedRedirect(
@@ -386,7 +399,7 @@ export const comprarUser= async (formData:FormData) => {
       const {  error:errorupdate } = await supabase
       .from('profile')
       .update({ ntickets:[...profile[0].ntickets, numbersRifa] })
-      .eq('user', user)
+      .eq('user_id', user)
       .select()
         
 
@@ -397,13 +410,58 @@ export const comprarUser= async (formData:FormData) => {
       ])
       .select()
 
-    if (payment) return redirect(`/protected/dashboard/users/?buy=Compra Exitosa!`)
+     
+
+    if (payment){
+      for (let index = 0; index < payment[0].numbers.length; index++) {
+        const element = payment[0].numbers[index];
+        const { data:tickets, error } = await supabase
+        .from('tickets')
+        .update({ "status": 'no disponible' })
+        .eq('number', element)
+        .select()
+        if(error)return redirect(`/protected/dashboard/admin/pagos/verify/id?error="error del servidor intente de nuevo"`) 
+        
+      }
+      return redirect(`/protected/dashboard/users/?buy=Compra Exitosa!`)
+
+    } 
   
     return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
   
   
 };
 
+
+export const validarPago= async (formData:FormData) => {
+  const supabase = await createClient();
+  const id= formData.get("id")
+
+  const { data, error } = await supabase
+  .from('payments')
+  .update({ status: true })
+  .eq('id', id)
+  .select()
+
+  if(!data){
+    return  redirect(`/protected/dashboard/admin/pagos/verify/${id}?error="error del servidor intente de nuevo"`) 
+  
+  }
+  for (let index = 0; index < data[0].numbers.length; index++) {
+    const element = data[0].numbers[index];
+    const { data:tickets, error } = await supabase
+    .from('tickets')
+    .update({ "status": 'comprado' })
+    .eq('number', element)
+    .select()
+    if(error)return redirect(`/protected/dashboard/admin/pagos/verify/${id}?error="error del servidor intente de nuevo"`) 
+    
+  }
+  
+  return  redirect(`/protected/dashboard/admin/pagos/?message=Pago validado exitosamente!`) 
+  
+  
+};
 
 
 
