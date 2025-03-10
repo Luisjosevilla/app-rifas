@@ -4,8 +4,8 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import ImageKit from "imagekit"
-import fs from "fs"
+import jwt from 'jsonwebtoken';
+
 const getprice=async ()=>{
 
   const getTasa= await fetch("https://ve.dolarapi.com/v1/dolares/paralelo",{method:"GET"})
@@ -19,19 +19,14 @@ const getprice=async ()=>{
       
 }
 
-const imagekit = new ImageKit({
-  publicKey: process.env.NEXT_PUBLIC_KEY_imagekit!,
-  privateKey: process.env.APIKEY_imagekit!,
-  urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT!,
-});
 const getNumbers= async (number:number)=>{
   "use server"
  
   const data= await fetch(`${process.env.URL}/api/numbers?count=${number}`,{method:"GET"})
   const datares= await data.json()
-  const numbers= datares?.numbers.map((item:any)=>item.number )
+  const numbers= datares?.numbers.map((item:any)=>`${item.number}` )
 
-  return redirect("/sign-up/?numbers="+numbers.toString())
+  return numbers
 }
 
 export const signUpAction = async (formData: FormData) => {
@@ -39,6 +34,12 @@ export const signUpAction = async (formData: FormData) => {
   const password = formData.get("password")?.toString();
   const name = formData.get("name")?.toString();
   const phone = formData.get("phone")?.toString();
+  const img = formData.get("img")?.toString();
+  const monto = formData.get("monto")?.toString();
+  const method = formData.get("method")?.toString();
+  const number = formData.get("number")?.toString();
+  const nt = formData.get("nt")?.toString();
+
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -57,7 +58,7 @@ export const signUpAction = async (formData: FormData) => {
       emailRedirectTo: `${origin}/auth/callback`,
     },
   });
-  
+  const numbersRifa= await getNumbers(Number(number))
 
   if (error) {
     console.error(error.code + " " + error.message);
@@ -67,21 +68,31 @@ export const signUpAction = async (formData: FormData) => {
       const {  error } = await supabase
       .from('profile')
       .insert([
-        { user_id:data.user?.id,rol:"user",name,phone,ntickets:[""], address:"" },
+        { user_id:data.user?.id,rol:"user",name,phone,ntickets:numbersRifa, address:"" },
       ])
       .select()
 
-      if (error) {
+      const { data:payment, error:errorpayments } = await supabase
+      .from('payments')
+      .insert([
+        { user: data.user?.id, numbers:numbersRifa, capture:img, trans_number:nt, pay_method:method,status:false,monto:monto },
+      ])
+      .select()
+
+      if (error ) {
         console.error(error.code + " " + error.message);
         return encodedRedirect("error", "/sign-up", error.message);
       }
+      if(errorpayments ){
+        return encodedRedirect("error", "/sign-up", errorpayments.message);
+      }
         
 
-    return encodedRedirect(
-      "success",
-      "/sign-in",
-      "Thanks for signing up! Please check your email for a verification link.",
-    );
+      const { error:errorsignin } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+      });
+    return redirect("/protected/dashboard/users?user=nuevo");
   }
 };
 
@@ -205,11 +216,38 @@ export const seeMonto = async (formData:FormData) => {
   const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
   return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}`) 
 };
+
+export const seeMontoUser = async (formData:FormData) => {
+  const supabase = await createClient();
+  const method = formData.get("method") 
+  const number = formData.get("number") 
+  if(!method || !number || !(Number(number)>=4)) {
+    return  encodedRedirect(
+        "error",
+        "/protected/dashboard/users/buy",
+        "Ingresar valores validos",
+      ); 
+  }
+  let { data: methods, error:errormethod } = await supabase
+  .from('method')
+  .select('*')
+  .eq("name",method);
+  if(!methods){
+    return  encodedRedirect(
+      "error",
+      "/protected/dashboard/users/buy",
+      "Error de servidor",
+    ); 
+  }
+
+  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
+  return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}`) 
+};
 export const selectMethod= async (formData:FormData) => {
   const method = formData.get("method") 
   const number = formData.get("number") 
   const transferencia = formData.get("transferencia") 
-  const file = formData.get("file") as File; 
+  const file = formData.get("file") 
   const terms = formData.get("terms") 
   const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
  
@@ -238,41 +276,134 @@ export const selectMethod= async (formData:FormData) => {
     return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="Aceptar los terminos y condiciones"`) 
   }
  
-  
+  const url = 'https://upload.imagekit.io/api/v2/files/upload';
+  const form = new FormData();
+  form.append('file', file);
+  const filename= `capture${Math.round(Math.random())*1000000}.jpg`;
 
+
+  const token = jwt.sign({
+    fileName: filename
+  }, process.env.PRIVATE_KEY!, {
+    expiresIn: 600,
+    header: {
+      alg: "HS256",
+      typ: "JWT",
+      kid: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
+    },
+  });
+  form.append("fileName", filename);
+  form.append('token', token);
+  const options = {
+    body:form,
+    method: 'POST',
+    headers: {Accept: 'application/json', Authorization: `Bearer ${process.env.PRIVATE_KEY}`}
+  };
 
    
-  try {
-
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    fs.readFile(buffer, function(err, data) {
-      console.log("error",err)
-      console.log("data",data)
-      if (err) throw err; // Fail if the file can't be read.
-      imagekit.upload({
-        file : data, //required
-        fileName : `capture${Math.round(Math.random()*10000)}.jpg`, 
-      }, function(error, result) {
-        if(error){ 
-          
-          redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error al subir imagen intente de nuevo"`);
-
-        }else if(result){
-          return redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&img=${result.url}&step=register`)
-        }else{
-          redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`);
-        }
-      });
-    });
- } catch (error) {
-  console.log("error")
+    const response = await fetch(url, options);
+    const data = await response.json();
+    if (data) return redirect(`/sign-up?number=${number}&nt=${transferencia}&&method=${method}&monto=${monto}&img=${data?.url}&step=register`)
+  
     return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
-  }
-
   
   
 };
+
+export const comprarUser= async (formData:FormData) => {
+  const supabase = await createClient();
+  const method = formData.get("method") 
+  const number = formData.get("number") 
+  const transferencia = formData.get("transferencia") 
+  const file = formData.get("file") 
+  const terms = formData.get("terms") 
+  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
+  const user = formData.get("user") 
+  if(!(Number(number)>=4)){
+    encodedRedirect(
+      "error",
+      `/protected/dashboard/users/buy`,
+      `Numero tiene que ser mayor que 4`,
+    );
+  }
+  if(!transferencia){
+    return encodedRedirect(
+      "error",
+      `/protected/dashboard/users/buy`,
+      `Número de tranferencia es requerido.`,
+    );
+  }
+  if(!file){
+   return encodedRedirect(
+      "error",
+      `/protected/dashboard/users/buy`,
+      `Capture es requerido.`,
+    );
+  }
+  if(!terms){
+    return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="Aceptar los terminos y condiciones"`) 
+  }
+ 
+  const url = 'https://upload.imagekit.io/api/v2/files/upload';
+  const form = new FormData();
+  form.append('file', file);
+  const filename= `capture${Math.round(Math.random())*1000000}.jpg`;
+
+
+  const token = jwt.sign({
+    fileName: filename
+  }, process.env.PRIVATE_KEY!, {
+    expiresIn: 600,
+    header: {
+      alg: "HS256",
+      typ: "JWT",
+      kid: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
+    },
+  });
+  form.append("fileName", filename);
+  form.append('token', token);
+  const options = {
+    body:form,
+    method: 'POST',
+    headers: {Accept: 'application/json', Authorization: `Bearer ${process.env.PRIVATE_KEY}`}
+  };
+
+   
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    let { data: profile, error:errorprofile } = await supabase
+    .from('profile')
+    .select('*')
+    .eq("user_id", user )
+            
+    const numbersRifa= await getNumbers(Number(number))
+
+      if(!profile){
+        return redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
+      }
+      
+      const {  error:errorupdate } = await supabase
+      .from('profile')
+      .update({ ntickets:[...profile[0].ntickets, numbersRifa] })
+      .eq('user', user)
+      .select()
+        
+
+      const { data:payment, error:errorpayments } = await supabase
+      .from('payments')
+      .insert([
+        { user: user, numbers:numbersRifa, capture:data?.url, trans_number:transferencia, pay_method:method,status:false,monto:monto },
+      ])
+      .select()
+
+    if (payment) return redirect(`/protected/dashboard/users/?buy=Compra Exitosa!`)
+  
+    return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
+  
+  
+};
+
 
 
 

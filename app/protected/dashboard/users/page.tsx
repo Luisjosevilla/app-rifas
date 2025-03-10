@@ -20,12 +20,40 @@ async function Page() {
   .select("*")
   .eq('user_id', user?.id)
 
-     console.log(profile)      
+   if(!profile){
+    return redirect("/sign_in")
+   }     
   if(profile !== null ){
       if(profile[0]?.rol == "admin"){
          return redirect("/protected/dashboard/admin")
       }
   }
+
+  
+let { data: paymentsData, error:errorPayments} = await supabase
+.from('payments')
+.select("*")
+.eq('user', user?.id)
+
+let porValidar=0;
+let validados=0;
+
+if(!paymentsData){
+  return redirect("/sign_in")
+ }    
+for (let index = 0; index < paymentsData?.length; index++) {
+  const element:any = paymentsData[index];
+
+  if(!element.status){
+    porValidar += element.numbers.length
+
+  }else{
+    validados += element.numbers.length
+  }
+  
+}
+
+        
  
   
   return (
@@ -41,7 +69,7 @@ async function Page() {
             <CardDescription>Numero de tickets comprados</CardDescription>
           </CardHeader>
           <CardContent>
-            <span className='text-3xl font-bold text-primary '>{0}</span>
+            <span className='text-3xl font-bold text-primary '>{profile[0].ntickets.length}</span>
           </CardContent>
          
         </Card>
@@ -51,18 +79,18 @@ async function Page() {
             <CardDescription>Tickets validados</CardDescription>
           </CardHeader>
           <CardContent>
-          <span className='text-3xl font-bold text-primary '>{0}</span>
+          <span className='text-3xl font-bold text-primary '>{validados}</span>
          
           </CardContent>
           
         </Card>
         <Card className="w-full md:basis-1/4 bg-background">
           <CardHeader>
-            <CardTitle>Fecha de rifa</CardTitle>
-            <CardDescription>Tickets Vendidos</CardDescription>
+            <CardTitle>Tickets sin validad</CardTitle>
+            <CardDescription>En espera de ser validados </CardDescription>
           </CardHeader>
           <CardContent>
-          <span className='text-3xl font-bold text-primary '>{0}</span>
+          <span className='text-3xl font-bold text-primary '>{porValidar}</span>
           </CardContent>
         </Card>
         </div>
@@ -74,7 +102,7 @@ async function Page() {
             <Image src={moto1} width={200} height={200} alt='moto' className='basis-1/4 rounded-lg '/>
             <div className='flex flex-col gap-4 items-start justify-start'>
               <h2 className='text-primary text-3xl font-bold'>MOTO RK200</h2>
-              <p className='w-3/4 text-primary font-bold'>Texto para promocionar la rifa y provocar que el usuario quiera comprar mas </p>
+              <p className='w-3/4 text-primary font-bold'>¡Podrás ser el ganador de cualquiera de los 7 GRANDIOSOS PREMIOS🎁! </p>
               <AnimateButton />
             </div>
           </div>

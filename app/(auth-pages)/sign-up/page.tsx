@@ -50,13 +50,20 @@ export default async function Signup(props: {
       <div className="flex flex-col gap-2 w-full h-fit md:w-1/2">
       
       {searchParams.step =="register"&&(Number(searchParams.number)>=4) && searchParams.method != undefined?
-      <form className="flex flex-col w-full min-h-[80vh] gap-4 basis-1/2 mx-auto p-6 md:px-10 rounded-lg shadow-xl">
+      <form className="overflow-hidden relative flex flex-col w-full min-h-[80vh] gap-4 basis-1/2 mx-auto p-6 md:px-10 rounded-lg shadow-xl">
       
-        <h1 className="text-3xl font-bold text-primary">Ingresa tus datos de contacto y de inicio de sesion!</h1>
+        <h1 className="text-3xl font-bold text-primary">Ingresa tus datos!</h1>
         {"success" in searchParams?
         <FormMessage message={searchParams} />
          :
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8 overflow-hidden">
+          <div className="absolute  top-0 -right-full">
+          <Input name="img"  defaultValue={searchParams.img} />
+          <Input name="monto"  defaultValue={searchParams.monto} />
+          <Input name="number" defaultValue={searchParams.number}  />
+          <Input name="method"  defaultValue={searchParams.method} />
+          <Input name="nt"  defaultValue={searchParams.nt} />
+          </div>
           <Label htmlFor="name">Nombre</Label>
           <Input name="name" placeholder="Nombre Apellido" required />
 
@@ -75,6 +82,15 @@ export default async function Signup(props: {
             minLength={6}
             required
           />
+          <div className="flex items-center space-x-2">
+              <Checkbox id="terms" name="terms" />
+              <label
+                htmlFor="terms"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+               Acepto los <Link className="hover:text-primary text-blue-700" href={"/tac"}>Términos y condiciones</Link>
+              </label>
+            </div>
           
          
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">

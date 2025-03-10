@@ -44,7 +44,7 @@ async function Page({
                 return  <TableRow key={index}>
                 <TableCell className="font-medium min-w-[200px] text-center">{items.id}</TableCell>
                 <TableCell className="font-medium  text-center">{items.user}</TableCell>
-                <TableCell className="font-medium min-w-[150px] text-center">{items.nmbers.length}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center">{items.numbers.length}</TableCell>
                 <TableCell className="font-medium min-w-[150px] text-center">{items.status}</TableCell>
               </TableRow>
                })}
