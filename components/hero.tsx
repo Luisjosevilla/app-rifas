@@ -27,7 +27,7 @@ export default function Header() {
       <div className="basis-1/2 h-fit flex flex-col gap-6 items-center justify-center relative z-10">
         <h1 className="font-sans text-primary-foreground md:text-primary  text-center md:text-8xl text-6xl font-black ">GRAN RIFA</h1>
         <span className="md:text-2xl text-lg font-bold text-foreground text-center">No esperes más y se el ganador de cualquiera de nuestros 7 premios, participa y gana.</span>
-        <AnimateButton/>
+        <AnimateButton ruta={"/sign-up"}/>
       </div>
       <div className="basis-1/2 h-full w-full relative z-10 flex items-end">
         <Altar className="absolute -bottom-[16vh] md:-bottom-[24vh] lg:-bottom-[34vh] w-full h-full md:h-3/4"/>

@@ -125,7 +125,7 @@ export default async function Signup(props: {
             </tbody>
           </table>
           <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
-              <label className="text-md text-foreground font-bold flex flex-col">Agregar el número de tickets<span className="text-xs text-foreground/60"> (tiene que ser mayor a 4 tickets)</span></label>
+              <label className="text-md text-foreground font-bold flex flex-col">Agregar cantidad de tickets a comprar<span className="text-xs text-foreground/60"> (tiene que ser mayor a 4 tickets)</span></label>
               <div className="flex flex-row gap-2 items-center justify-center">
                   <input type="number" className={`border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 w-[300px]`} name="number" defaultValue={searchParams?.number}/>
               </div>

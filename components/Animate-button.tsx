@@ -1,10 +1,10 @@
 import React from 'react'
 import "./css/button.css"
 import Link from 'next/link'
-function AnimateButton() {
+function AnimateButton({ruta}:{ruta:string}) {
   return (
     <div className="wrapperPath">
-  <Link className="ctaPath" href="/protected/user/buy">
+  <Link className="ctaPath" href={ruta}>
     <span>PARTICIPA</span>
     <span className='Path'>
       <svg width="50px" height="33px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">

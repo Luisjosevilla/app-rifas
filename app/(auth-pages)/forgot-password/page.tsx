@@ -22,7 +22,7 @@ export default async function ForgotPassword(props: {
             </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <div className="flex flex-col gap-2 min-h-[50vh] [&>input]:mb-3 mt-8">
           <Label htmlFor="email">Correo</Label>
           <Input name="email" placeholder="you@example.com" required />
           <SubmitButton formAction={forgotPasswordAction}>
@@ -31,7 +31,6 @@ export default async function ForgotPassword(props: {
           <FormMessage message={searchParams} />
         </div>
       </form>
-      <SmtpMessage />
     </>
   );
 }

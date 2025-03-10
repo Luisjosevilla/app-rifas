@@ -2,6 +2,16 @@ import React from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '../../../../../components/ui/table'
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../../../../../components/ui/pagination'
 import Link from 'next/link';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import Wsp from '@/components/Wsp';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { DialogDescription } from '@radix-ui/react-dialog';
+import ModalContact from '@/components/ModalContact';
 
 async function Page({
   params,
@@ -14,6 +24,7 @@ async function Page({
   const getData = await fetch(`${process.env.URL}/api/admin/Payments`,{method:"GET"})
     let data = await  getData.json()
     
+      const supabase = await createClient();
 
     const queryParams= await searchParams
     if(queryParams.query){
@@ -24,6 +35,19 @@ async function Page({
     const startIndex = "page" in queryParams && queryParams.page ? (Number(queryParams.page) * 10): 0;
     const endIndex = startIndex + 10;
     const paginatedData = data?.payments?.slice(startIndex, endIndex);
+
+    const getUser= async (user:string)=>{
+      let { data: profile, error:errorprofile } = await supabase
+          .from('profile')
+          .select('*')
+          .eq("user_id", user)
+      
+          if(!profile){
+           return {name:"",phone:""}
+          }
+
+          return {name:profile[0].name,phone:profile[0].phone}
+    }
     console.log(paginatedData)
   return (
     <section className='flex flex-col gap-6 w-full p-10'>
@@ -38,17 +62,24 @@ async function Page({
                   <TableHead className="font-medium text-center min-w-[200px]">Usuario</TableHead>
                   <TableHead className="font-medium min-w-[150px] text-center">Numeros</TableHead>
                   <TableHead className="font-medium min-w-[150px] text-center">Estado</TableHead>
-                  <TableHead className="font-medium min-w-[150px] text-center">Detalles</TableHead>
+                  <TableHead className="font-medium min-w-[150px] text-center">Teléfono</TableHead>
+                  <TableHead className="font-medium min-w-[150px] text-center">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-               {paginatedData?.map((items:any,index:number)=>{
+               {paginatedData?.map(async (items:any,index:number)=>{
                 return  <TableRow key={index} >
-                <TableCell className="font-medium min-w-[200px] text-center">{items.id}</TableCell>
-                <TableCell className="font-medium  text-center">{items.user}</TableCell>
-                <TableCell className="font-medium min-w-[150px] text-center">{items.numbers.length}</TableCell>
-                <TableCell className="font-medium min-w-[150px] text-center">{items.status?"Validado":"Por validar"}</TableCell>
-                <TableCell className="font-medium min-w-[150px] text-center"><Link className='px-4 p-2 rounded-lg bg-primary/50 text-white font-bold' href={`/protected/dashboard/admin/pagos/verify/${items?.id}`}>Ver</Link></TableCell>
+                <TableCell className="font-medium min-w-[200px] text-center">{items?.id}</TableCell>
+                <TableCell className="font-medium  text-center">{(await getUser(items.user))?.name}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center">{items?.numbers?.length}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center">{items?.status?"Validado":"Por validar"}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center">{(await getUser(items.user))?.phone}</TableCell>
+               
+                <TableCell className="font-medium min-w-[150px] text-center flex flex-row items-center justify-center gap-2">
+                  <ModalContact phone={(await getUser(items.user))?.phone}/>
+                    
+                  <Link className='px-4 p-2 rounded-lg bg-primary/50 text-white font-bold' href={`/protected/dashboard/admin/pagos/verify/${items?.id}`}>Ver</Link>
+                </TableCell>
               
               </TableRow>
                })}

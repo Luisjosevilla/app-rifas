@@ -86,7 +86,7 @@ for (let index = 0; index < paymentsData?.length; index++) {
         </Card>
         <Card className="w-full md:basis-1/4 bg-background">
           <CardHeader>
-            <CardTitle>Tickets sin validad</CardTitle>
+            <CardTitle>Tickets sin validar</CardTitle>
             <CardDescription>En espera de ser validados </CardDescription>
           </CardHeader>
           <CardContent>
@@ -103,7 +103,7 @@ for (let index = 0; index < paymentsData?.length; index++) {
             <div className='flex flex-col gap-4 items-start justify-start'>
               <h2 className='text-primary text-3xl font-bold'>MOTO RK200</h2>
               <p className='w-3/4 text-primary font-bold'>¡Podrás ser el ganador de cualquiera de los 7 GRANDIOSOS PREMIOS🎁! </p>
-              <AnimateButton />
+              <AnimateButton ruta={"/protected/dashboard/users/buy"} />
             </div>
           </div>
         
