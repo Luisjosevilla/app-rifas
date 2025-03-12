@@ -32,15 +32,20 @@ export default async function Signup(props: {
    
   
   const getprice=async ()=>{
-
-    const getTasa= await fetch("https://ve.dolarapi.com/v1/dolares/paralelo",{method:"GET"})
-    const resTasa= await getTasa?.json()
-    const supabase = await createClient();
-    let { data: settings, error } = await supabase
-    .from('settings')
-    .select("*")
-    if(!settings) return null;
-    return {price: settings[0].price, tasa:resTasa.promedio+1,monto:2 }
+    try{
+      const getTasa= await fetch("https://ve.dolarapi.com/v1/dolares/paralelo",{method:"GET"})
+      const resTasa= await getTasa?.json()
+      const supabase = await createClient();
+      let { data: settings, error } = await supabase
+      .from('settings')
+      .select("*")
+      if(!settings) return null;
+      return {price: settings[0].price, tasa:resTasa.promedio+1,monto:2 }
+          
+    }catch(err){
+      return {price: "", tasa:"",monto:""}
+    }
+   
         
   }
 
@@ -63,12 +68,12 @@ export default async function Signup(props: {
           <Input name="number" defaultValue={searchParams.number}  />
           <Input name="method"  defaultValue={searchParams.method} />
           <Input name="nt"  defaultValue={searchParams.nt} />
+          <Input name="name"  defaultValue={searchParams.name} />
+          <Input name="phone"  defaultValue={searchParams.phone} />
+          <Input name="cedula"  defaultValue={searchParams.cedula} />
+          
           </div>
-          <Label htmlFor="name">Nombre</Label>
-          <Input name="name" placeholder="Nombre Apellido" required />
-
-          <Label htmlFor="phone">Teléfono</Label>
-          <Input name="phone" placeholder="04120000000" required />
+        
         
           
           <Label htmlFor="email">Correo</Label>
@@ -170,17 +175,40 @@ export default async function Signup(props: {
 
           {searchParams.monto? 
           <>
+          <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
+              <label className="text-md text-foreground  font-bold flex flex-col">Ingresar Nombre completo</label>
+              <div className="flex flex-row gap-2 items-center justify-center">
+                  <input required   type="text" name="name" className={`w-[300px] border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 `} />
+              </div>
+              
+            </div>
+
+          <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
+              <label className="text-md text-foreground font-bold flex flex-col">Ingresar número de Teléfono</label>
+              <div className="flex flex-row gap-2 items-center justify-center">
+                  <input required   type="number" name="phone" className={`w-[300px] border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 `}/>
+              </div>
+              
+            </div>
+            <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
+              <label className="text-md text-foreground font-bold flex flex-col">Ingresar número de Cédula</label>
+              <div className="flex flex-row gap-2 items-center justify-center">
+                  <input required   type="number" name="cedula" className={`w-[300px] border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 `}/>
+              </div>
+              
+            </div>
+          
            <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
               <label className="text-md text-foreground font-bold flex flex-col">Agregar el número de transferencia</label>
               <div className="flex flex-row gap-2 items-center justify-center">
-                  <input type="number" className={`w-[300px] border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 `} name="transferencia" placeholder="454500000"/>
+                  <input required   type="number" className={`w-[300px] border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 `} name="transferencia" placeholder="454500000"/>
               </div>
               
             </div>
             <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
               <label className="text-md text-foreground font-bold flex flex-col">Agregar el Capture de transferencia</label>
               <div className="flex flex-row gap-2 items-center justify-center">
-                  <input type="file" className={`border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 w-[300px] `} name="file" accept="jpg,png,jpeg" placeholder=""/>
+                  <input type="file" className={`border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 w-[300px] `} name="file" accept=".jpg,.png,.jpeg" placeholder=""/>
               </div>
               
             </div>

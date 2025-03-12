@@ -22,7 +22,7 @@ const getprice=async ()=>{
 const getNumbers= async (number:number)=>{
   "use server"
  
-  const data= await fetch(`${process.env.URL}/api/numbers?count=${number}`,{method:"GET"})
+  const data= await fetch(`${process.env.URL}/api/numbers?count=${encodeURIComponent(number)}`,{method:"GET"})
   const datares= await data.json()
   const numbers= datares?.numbers.map((item:any)=>`${item.number}` )
 
@@ -33,6 +33,7 @@ export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const name = formData.get("name")?.toString();
+  const cedula = formData.get("cedula")?.toString();
   const phone = formData.get("phone")?.toString();
   const img = formData.get("img")?.toString();
   const monto = formData.get("monto")?.toString();
@@ -68,7 +69,7 @@ export const signUpAction = async (formData: FormData) => {
       const {  error } = await supabase
       .from('profile')
       .insert([
-        { user_id:data.user?.id,rol:"user",name,phone,ntickets:numbersRifa, address:"" },
+        { user_id:data.user?.id,rol:"user",name,phone,ntickets:numbersRifa, address:"",cedula:cedula },
       ])
       .select()
 
@@ -94,10 +95,10 @@ export const signUpAction = async (formData: FormData) => {
           .update({ "status": 'no disponible' })
           .eq('number', element)
           .select()
-          if(error)return redirect(`/protected/dashboard/admin/pagos/verify/id?error="error del servidor intente de nuevo"`) 
+          if(error)return redirect(`/protected/dashboard/admin/pagos/verify/id?error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
           
         }
-        return redirect(`/protected/dashboard/users/?buy=Compra Exitosa!`)
+        return redirect(`/protected/dashboard/users/?buy=${encodeURIComponent("Compra Exitosa!")}`)
   
       } 
 
@@ -204,36 +205,39 @@ export const signOutAction = async () => {
 };
 
 export const seeMonto = async (formData:FormData) => {
-  const supabase = await createClient();
-  const method = formData.get("method") 
-  const number = formData.get("number") 
-  if(!method || !number || !(Number(number)>=4)) {
-    return  encodedRedirect(
+    const supabase = await createClient();
+    const method = formData.get("method")?.toString() 
+    const number = formData.get("number")?.toString() 
+    if(!method || !number || !(Number(number)>=4)) {
+      return  encodedRedirect(
+          "error",
+          "/sign-up",
+          "Ingresar valores validos",
+        ); 
+    }
+    let { data: methods, error:errormethod } = await supabase
+    .from('method')
+    .select('*')
+    .eq("name",method);
+
+    if(!methods){
+      return  encodedRedirect(
         "error",
         "/sign-up",
-        "Ingresar valores validos",
+        "Error de servidor",
       ); 
-  }
-  let { data: methods, error:errormethod } = await supabase
-  .from('method')
-  .select('*')
-  .eq("name",method);
-  if(!methods){
-    return  encodedRedirect(
-      "error",
-      "/sign-up",
-      "Error de servidor",
-    ); 
-  }
-
-  const monto = methods[0].currency=="BS"?(Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2):(Number(number)*(await getprice())?.price).toFixed(2)
-  return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}`) 
+    }
+  
+    const monto = methods[0].currency=="BS"?(Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2):(Number(number)*(await getprice())?.price).toFixed(2)
+    return  redirect(`/sign-up?number=${encodeURIComponent(number)}&method=${encodeURIComponent(method!)}&monto=${monto}`) 
+  
 };
 
 export const seeMontoUser = async (formData:FormData) => {
-  const supabase = await createClient();
-  const method = formData.get("method") 
-  const number = formData.get("number") 
+
+    const supabase = await createClient();
+  const method = formData.get("method")?.toString() 
+  const number = formData.get("number")?.toString() 
   if(!method || !number || !(Number(number)>=4)) {
     return  encodedRedirect(
         "error",
@@ -254,84 +258,93 @@ export const seeMontoUser = async (formData:FormData) => {
   }
 
   const monto = methods[0].currency=="BS"?(Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2):(Number(number)*(await getprice())?.price).toFixed(2)
-  return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}`) 
+  return  redirect(`/protected/dashboard/users/buy?number=${encodeURIComponent(number)}&method=${encodeURIComponent(method!)}&monto=${monto}`) 
+
 };
 export const selectMethod= async (formData:FormData) => {
-  const method = formData.get("method") 
-  const number = formData.get("number") 
-  const transferencia = formData.get("transferencia") 
-  const file = formData.get("file") 
-  const terms = formData.get("terms") 
-  const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
- 
-  if(!(Number(number)>=4)){
-    encodedRedirect(
-      "error",
-      `/sign-up`,
-      `Numero tiene que ser mayor que 4`,
-    );
-  }
-  if(!transferencia){
-    return encodedRedirect(
-      "error",
-      `/sign-up`,
-      `Número de tranferencia es requerido.`,
-    );
-  }
-  if(!file){
-   return encodedRedirect(
-      "error",
-      `/sign-up`,
-      `Capture es requerido.`,
-    );
-  }
-  if(!terms){
-    return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="Aceptar los terminos y condiciones"`) 
-  }
- 
-  const url = 'https://upload.imagekit.io/api/v2/files/upload';
-  const form = new FormData();
-  form.append('file', file);
-  const filename= `capture${Math.round(Math.random())*1000000}.jpg`;
-
-
-  const token = jwt.sign({
-    fileName: filename
-  }, process.env.PRIVATE_KEY!, {
-    expiresIn: 600,
-    header: {
-      alg: "HS256",
-      typ: "JWT",
-      kid: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
-    },
-  });
-  form.append("fileName", filename);
-  form.append('token', token);
-  const options = {
-    body:form,
-    method: 'POST',
-    headers: {Accept: 'application/json', Authorization: `Bearer ${process.env.PRIVATE_KEY}`}
-  };
-
+  
+    const method = formData.get("method")?.toString() 
+    const number = formData.get("number")?.toString() 
+    const cedula = formData.get("cedula")?.toString() 
+    const name = formData.get("name")?.toString() 
+    const phone = formData.get("phone")?.toString() 
+    const transferencia = formData.get("transferencia")?.toString() 
+    const file = formData.get("file") 
+    const terms = formData.get("terms")?.toString() 
+    const monto = (Number(number)*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2)
    
-    const response = await fetch(url, options);
-    const data = await response.json();
-    if (data) return redirect(`/sign-up?number=${number}&nt=${transferencia}&&method=${method}&monto=${monto}&img=${data?.url}&step=register`)
+    if(!(Number(number)>=4)){
+      encodedRedirect(
+        "error",
+        `/sign-up`,
+        `Numero tiene que ser mayor que 4`,
+      );
+    }
+    if(!transferencia){
+      return encodedRedirect(
+        "error",
+        `/sign-up`,
+        `Número de tranferencia es requerido.`,
+      );
+    }
+    if(!file){
+     return encodedRedirect(
+        "error",
+        `/sign-up`,
+        `Capture es requerido.`,
+      );
+    }
+    if(!terms){
+      return  redirect(`/sign-up?number=${encodeURIComponent(number!)}&method=${encodeURIComponent(method!)}&monto=${monto}&error=${encodeURIComponent("Aceptar los terminos y condiciones")}`) 
+    }
+   
+    const url = 'https://upload.imagekit.io/api/v2/files/upload';
+    const form = new FormData();
+    form.append('file', file);
+    const filename= `capture${Math.round(Math.random())*1000000}.jpg`;
   
-    return  redirect(`/sign-up?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
   
+    const token = jwt.sign({
+      fileName: filename
+    }, process.env.PRIVATE_KEY!, {
+      expiresIn: 600,
+      header: {
+        alg: "HS256",
+        typ: "JWT",
+        kid: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
+      },
+    });
+    form.append("fileName", filename);
+    form.append('token', token);
+    const options = {
+      body:form,
+      method: 'POST',
+      headers: {Accept: 'application/json', Authorization: `Bearer ${process.env.PRIVATE_KEY}`}
+    };
   
+     
+      const response = await fetch(url, options);
+      const data = await response.json();
+      if (data) return redirect(`/sign-up?number=${encodeURIComponent(number!)}&nt=${transferencia}&method=${encodeURIComponent(method!)}&monto=${monto}&img=${data?.url}&phone=${phone}&cedula=${cedula}&name=${name}&step=register`)
+    
+      return  redirect(`/sign-up?number=${encodeURIComponent(number!)}&method=${encodeURIComponent(method!)}&monto=${monto}&phone=${phone}&cedula=${cedula}&name=${name}&error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
+    
+    
 };
 
 export const comprarUser= async (formData:FormData) => {
+
   const supabase = await createClient();
-  const method = formData.get("method") 
-  const number = formData.get("number") 
-  const transferencia = formData.get("transferencia") 
+  const method = formData.get("method")?.toString() 
+  const number = formData.get("number")?.toString() 
+  const transferencia = formData.get("transferencia")?.toString() 
+  const cedula = formData.get("cedula")?.toString() 
+  const phone = formData.get("phone")?.toString() 
+  const name = formData.get("name")?.toString() 
   const file = formData.get("file") 
-  const terms = formData.get("terms") 
-  const monto = formData.get("monto") 
-  const user = formData.get("user") 
+  const terms = formData.get("terms")?.toString() 
+  const monto = formData.get("monto")?.toString() 
+  const user = formData.get("user")?.toString() 
   if(!(Number(number)>=4)){
     encodedRedirect(
       "error",
@@ -354,7 +367,7 @@ export const comprarUser= async (formData:FormData) => {
     );
   }
   if(!terms){
-    return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="Aceptar los terminos y condiciones"`) 
+    return  redirect(`/protected/dashboard/users/buy?number=${encodeURIComponent(number!)}&method=${encodeURIComponent(method!)}&monto=${monto}&error=${encodeURIComponent("Aceptar los terminos y condiciones")}`) 
   }
  
   const url = 'https://upload.imagekit.io/api/v2/files/upload';
@@ -393,7 +406,7 @@ export const comprarUser= async (formData:FormData) => {
     const numbersRifa= await getNumbers(Number(number))
 
       if(!profile){
-        return redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
+        return redirect(`/protected/dashboard/users/buy?number=${encodeURIComponent(number!)}&method=${encodeURIComponent(method!)}&monto=${monto}&error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
       }
       
       const {  error:errorupdate } = await supabase
@@ -410,8 +423,6 @@ export const comprarUser= async (formData:FormData) => {
       ])
       .select()
 
-     
-
     if (payment){
       for (let index = 0; index < payment[0].numbers.length; index++) {
         const element = payment[0].numbers[index];
@@ -420,15 +431,15 @@ export const comprarUser= async (formData:FormData) => {
         .update({ "status": 'no disponible' })
         .eq('number', element)
         .select()
-        if(error)return redirect(`/protected/dashboard/admin/pagos/verify/id?error="error del servidor intente de nuevo"`) 
+        if(error)return redirect(`/protected/dashboard/users/?error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
         
       }
-      return redirect(`/protected/dashboard/users/?buy=Compra Exitosa!`)
+      return redirect(`/protected/dashboard/users/?buy=${encodeURIComponent("Compra Exitosa!")}`)
 
     } 
   
-    return  redirect(`/protected/dashboard/users/buy?number=${number}&method=${method}&monto=${monto}&error="error del servidor intente de nuevo"`) 
-  
+   return  redirect(`/protected/dashboard/users/buy?number=${encodeURIComponent(number!)}&method=${encodeURIComponent(method!)}&monto=${monto}&name=${name}&cedula=${cedula}&phone=${phone}&error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
+ 
   
 };
 
@@ -444,7 +455,7 @@ export const validarPago= async (formData:FormData) => {
   .select()
 
   if(!data){
-    return  redirect(`/protected/dashboard/admin/pagos/verify/${id}?error="error del servidor intente de nuevo"`) 
+    return  redirect(`/protected/dashboard/admin/pagos/verify/${id}?error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
   
   }
   for (let index = 0; index < data[0].numbers.length; index++) {
@@ -454,13 +465,13 @@ export const validarPago= async (formData:FormData) => {
     .update({ "status": 'comprado' })
     .eq('number', element)
     .select()
-    if(error)return redirect(`/protected/dashboard/admin/pagos/verify/${id}?error="error del servidor intente de nuevo"`) 
+    if(error)return redirect(`/protected/dashboard/admin/pagos/verify/${id}?error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
     
   }
   
-  return  redirect(`/protected/dashboard/admin/pagos/?message=Pago validado exitosamente!`) 
+  return  redirect(`/protected/dashboard/admin/pagos/?message=${encodeURIComponent("Pago validado exitosamente!")}`) 
   
-  
+
 };
 
 
