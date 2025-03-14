@@ -45,6 +45,7 @@ const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
     getValues,
     setValue,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm<IFormInput>({ resolver: yupResolver(schema) ,defaultValues:{
    
@@ -88,7 +89,14 @@ const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
   };
 
   const seeMonto=async ()=>{
+    if(Number(getValues("number"))<4){
+        return setError("number",{message:"Número tiene que ser mayor que 4"})
+    }
+    if(!getValues("method")){
+        return setError("method",{message:"Metodo de pago es requerido!"})
 
+    }
+    clearErrors()
     const res= await fetch(`/api/buy/monto?number=${encodeURIComponent(getValues("number"))}&method=${encodeURIComponent(getValues("method"))}`,{method:"GET"})
     if(res.status !== 200) router.push(`/sign-up?error=${encodeURIComponent("Error al obtener monto, intente de nuevo!.")}`)
     const monto = await res.json()
