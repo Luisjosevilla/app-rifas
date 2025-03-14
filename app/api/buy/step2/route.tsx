@@ -72,7 +72,7 @@ export async function POST( request:NextRequest) {
                   const element = payment[0].numbers[index];
                   const { data:tickets, error } = await supabase
                   .from('tickets')
-                  .update({ "status": 'no disponible' })
+                  .update({ "status": 'no disponible',payid:payment[0].id })
                   .eq('number', element)
                   .select()
                   if(error)return NextResponse.json({msj:"Error tickets"},{status:500})

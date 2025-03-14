@@ -267,7 +267,7 @@ export const CancelarPago= async (formData:FormData) => {
     const element = data[0].numbers[index];
     const { data:tickets, error } = await supabase
     .from('tickets')
-    .update({ "status": 'disponible' })
+    .update({ "status": 'disponible' ,payid:null})
     .eq('number', element)
     .select()
 
@@ -292,7 +292,7 @@ export const CancelarPago= async (formData:FormData) => {
       const element = data[0].numbers[index];
       const { data:tickets, error } = await supabase
       .from('tickets')
-      .update({ "status": 'no disponible' })
+      .update({ "status": 'no disponible',payid:data[0]?.id })
       .eq('number', element)
       .select()
 

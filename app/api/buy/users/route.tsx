@@ -92,7 +92,7 @@ if(!(Number(formData.get("number"))>=4)){
         const element = payment[0].numbers[index];
         const { data:tickets, error } = await supabase
         .from('tickets')
-        .update({ "status": 'no disponible' })
+        .update({ "status": 'no disponible',payid:payment[0].id })
         .eq('number', element)
         .select()
         if(error){
