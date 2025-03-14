@@ -21,7 +21,7 @@ if( !count){
       let { data, error:errortickets } = await supabase
       .from('tickets')
       .select("*")
-      .range(index%2==1? (index>4?4000: (index-1)*1000): (index>4?9000:( 5000+(index*1000))), 10000)
+      .range((Math.round(Math.random()*9))*1000, 9999)
       .eq('status', 'disponible')
       if( !data|| errortickets){
         const msj= errortickets
@@ -32,8 +32,6 @@ if( !count){
       
     }
  
-console.log(datanumber)
-
   return NextResponse.json({ numbers:datanumber})
 }
 

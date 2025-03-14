@@ -51,7 +51,7 @@ const supabase = await createClient();
                 return  <TableRow key={index}>
                 <TableCell className="font-medium min-w-[200px] text-center">{items?.id}</TableCell>
                 <TableCell className="font-medium  text-center">{items?.monto}</TableCell>
-                <TableCell className="font-medium min-w-[150px] text-center">{items?.numbers?.toString()}</TableCell>
+                <TableCell className="font-medium min-w-[150px] text-center flex gap-2">{items?.numbers.map((i:any,index:number)=>{return <span key={index} className='p-2 rounded-lg text-xs w-fit h-fit bg-primary text-white font-bold'>{i.padStart(4, "0")}</span>})}</TableCell>
                 <TableCell className="font-medium min-w-[150px] text-center">{!(items?.status)?"Por validar":"Validado"}</TableCell>
               </TableRow>
                })}

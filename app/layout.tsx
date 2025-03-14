@@ -14,8 +14,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Rifa",
-  description: "Compra tu numero y gana grandes premios",
+  title: "RifasVillas",
+  description: "🎉 ¡Participa en Nuestra Gran Rifa de Rifas Villa! 🎉\n ¡ Te invitamos a participar en nuestra emocionante rifa con increíbles premios! ",
 };
 
 const geistSans = Geist({

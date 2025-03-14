@@ -273,10 +273,9 @@ export const CancelarPago= async (formData:FormData) => {
 
     const {  error:errorupdate } = await supabase
       .from('profile')
-      .update({ ntickets:profile[0].ntickets.filter((e:any)=>e==element)})
+      .update({ ntickets:profile[0].ntickets.filter((e:any)=>e==element).length<4?[]:profile[0].ntickets.filter((e:any)=>e==element)})
       .eq('user_id',  data[0].user )
       .select();
-      console.log(errorupdate,error)
 
     if(error|| errorupdate )return redirect(`/protected/dashboard/admin/pagos/verify/${id}?error=${encodeURIComponent("error al cambiar estado de tickets, intente de nuevo")}`) 
     

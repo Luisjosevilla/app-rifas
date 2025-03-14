@@ -72,7 +72,7 @@ const schema = yup.object().shape({
       };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4 items-center justify-center'>
+        <form onSubmit={handleSubmit(onSubmit)}  className='flex flex-col gap-4 items-center justify-center'>
           {error!== "" ? <span className='text-red-600 text-md'>{error}</span>:null}
         <div className='flex flex-col gap-2 w-full md:w-3/4'>
          <span className='text-red-600 text-xs '>{errors.email?.message}</span>
@@ -105,7 +105,7 @@ const schema = yup.object().shape({
             </div>
           
          
-            <SubmitButton  type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
+            <SubmitButton pendingText='Registrando...' type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
             Registrarte
             </SubmitButton>
             <Toaster position='top-right'/>

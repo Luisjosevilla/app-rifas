@@ -46,15 +46,15 @@ async function Page({
            return {name:"",phone:""}
           }
 
-          return {name:profile[0].name,phone:profile[0].phone}
+          return {name:profile[0]?.name,phone:profile[0]?.phone}
     }
     console.log(paginatedData)
   return (
     <section className='flex flex-col gap-6 w-full md:p-10'>
       <div className='flex flex-row gap-4'>
       <h1 className='md:px-28  font-bold text-4xl text-primary'>Pagos</h1>
-      <div className={`${queryParams.error?"bg-red-300 text-white font-bold":queryParams.message?"bg-green-600 text-white font-bold":" hidden"}  py-2 px-4 rounded-lg `}>
-        <span className=''>{queryParams.error ?<>Error: {queryParams.error}</>: <>Mensaje: {queryParams.message}</>}</span>
+      <div className={`${queryParams?.error?"bg-red-300 text-white font-bold":queryParams?.message?"bg-green-600 text-white font-bold":" hidden"}  py-2 px-4 rounded-lg `}>
+        <span className=''>{queryParams?.error ?<>Error: {queryParams?.error}</>: <>Mensaje: {queryParams?.message}</>}</span>
       </div>
       </div>
     
@@ -76,13 +76,13 @@ async function Page({
                {paginatedData?.map(async (items:any,index:number)=>{
                 return  <TableRow key={index} >
                 <TableCell className="font-medium min-w-[200px] text-center">{items?.id}</TableCell>
-                <TableCell className="font-medium  text-center">{(await getUser(items.user))?.name}</TableCell>
+                <TableCell className="font-medium  text-center">{(await getUser(items?.user))?.name}</TableCell>
                 <TableCell className="font-medium min-w-[150px] text-center">{items?.numbers?.length}</TableCell>
                 <TableCell className="font-medium min-w-[150px] text-center">{items?.status?"Validado":"Por validar"}</TableCell>
                 <TableCell className="font-medium min-w-[150px] text-center">{(await getUser(items.user))?.phone}</TableCell>
                
                 <TableCell className="font-medium min-w-[150px] text-center flex flex-row items-center justify-center gap-2">
-                  <ModalContact phone={(await getUser(items.user))?.phone}/>
+                  <ModalContact phone={(await getUser(items?.user))?.phone}/>
                     
                   <Link className='px-4 p-2 rounded-lg bg-primary/50 text-white font-bold' href={`/protected/dashboard/admin/pagos/verify/${items?.id}`}>Ver</Link>
                 </TableCell>

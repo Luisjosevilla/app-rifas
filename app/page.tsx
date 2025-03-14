@@ -21,12 +21,12 @@ import tickets from "./public/tickets.png"
 import bolsa from "./public/bolsa.png"
 import { Play } from "lucide-react";
 import Timer from "../components/Timer";
+import { createClient } from "@/utils/supabase/server";
 
-const getDataAdmin=()=>{
-  const get= fetch("/")
-}
+
 
 export default async function Home() {
+        
   return (
     <>
       <nav className="w-full bg-background flex justify-center border-b border-b-foreground/10 h-18 relative  shadow-xl"  style={{"boxShadow": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"}}>

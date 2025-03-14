@@ -121,7 +121,7 @@ async function Page() {
               </div>
               <div className='flex flex-col gap-2'>
                 <Label>Moneda</Label>
-                <Input name="name" defaultValue={item?.currency}/>
+                <Input name="currency" defaultValue={item?.currency}/>
               </div>
               <div className='flex flex-col gap-2'>
                 <Label>Información</Label>

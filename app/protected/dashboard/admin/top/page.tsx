@@ -32,9 +32,10 @@ async function Page({
            return []
           }
          
-          const arrayOrdenado = profile.sort((a:any, b:any) =>{
-                console.log("a",a,"b",b)
-                return b.ntickets.length - a.ntickets.length});
+        const arrayOrdenado = profile.sort((a:any, b:any) =>{
+                
+                return b.ntickets.length - a.ntickets.length
+        });
 
 
           return arrayOrdenado
@@ -54,8 +55,8 @@ async function Page({
             return {name:profile[0].name,phone:profile[0].phone}
       }
   return (
-    <section className='flex flex-col gap-6 w-full p-10'>
-    <h1 className='px-28  font-bold text-4xl text-primary'>Top 10 de Compradores</h1>
+    <section className='flex flex-col gap-6 w-full p-2 md:p-10'>
+    <h1 className='px-4 font-bold text-2xl md:text-4xl text-primary'>Top 10 de Compradores</h1>
     <Table >
             <TableCaption>
               

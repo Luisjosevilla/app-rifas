@@ -7,7 +7,8 @@ import jwt from 'jsonwebtoken';
 
 export async function POST( request:NextRequest) {
 
-const supabase = await createClient();
+try {
+    
 const formData = await request.formData();
 
 
@@ -55,5 +56,8 @@ if(!(Number(formData.get("number"))>=4)){
     
       return NextResponse.json({msj:"Exito, seguir con el registro", img:data.url},{status:200})
     
+} catch (error) {
+    return NextResponse.json({msj:"Error servidor"},{status:500});
+}
 }
 

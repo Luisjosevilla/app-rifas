@@ -4,6 +4,8 @@ import React from 'react'
 import { createClient } from '../../../../utils/supabase/server';
 
 export async function GET( request:NextRequest) {
+    try {
+        
     const supabase = await createClient();
     const searchParams = request.nextUrl.searchParams
 
@@ -33,9 +35,12 @@ export async function GET( request:NextRequest) {
         }
       
         const monto = methods[0]?.currency=="BS"?(Number(searchParams.get("number"))*((await getprice())?.tasa)*(await getprice())?.price).toFixed(2):(Number(searchParams.get("number"))*(await getprice())?.price).toFixed(2)
-        return  NextResponse.json({monto:monto})
+        return  NextResponse.json({monto:monto},{status:200})
     
     
+    } catch (error) {
+        NextResponse.json({msj:"Error del servidor, intente de nuevo"},{status:500})
+    }
 }
     
     

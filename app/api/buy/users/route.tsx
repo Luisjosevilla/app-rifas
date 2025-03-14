@@ -7,7 +7,8 @@ import jwt from 'jsonwebtoken';
 
 export async function POST( request:NextRequest) {
 
-const supabase = await createClient();
+try {
+    const supabase = await createClient();
 const formData = await request.formData();
 
 const getNumbers= async (number:number,name:string)=>{
@@ -101,4 +102,7 @@ if(!(Number(formData.get("number"))>=4)){
       return NextResponse.json({msj:"Pago registrado, Espere por validación"},{status:200})
     }
 
+} catch (error) {
+    return NextResponse.json({msj:"Error servidor"},{status:500});
+}
 }

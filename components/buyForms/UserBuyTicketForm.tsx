@@ -80,7 +80,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
       method:"POST"})
       const res= await nextstep.json()
       if(nextstep.status !== 200){ 
-        return  toast.error(res.msj??"Error del servidor")
+        return  toast.error(res.msj??"Error, intente de nuevo")
       
       }
       
@@ -243,7 +243,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
             </div>
             
           </div>   
-        <SubmitButton type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
+        <SubmitButton pendingText='Comprando...' type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
         Comprar
         </SubmitButton>
         

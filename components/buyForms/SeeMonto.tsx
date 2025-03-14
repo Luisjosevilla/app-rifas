@@ -237,7 +237,7 @@ const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
             </div>
             
           </div>   
-        <SubmitButton type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
+        <SubmitButton pendingText='Un momento...' type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
         Continuar
         </SubmitButton>
         
