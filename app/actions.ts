@@ -314,5 +314,9 @@ export const CancelarPago= async (formData:FormData) => {
 
 };
 
+export const buscarGanador=()=>{
+  
+}
+
 
 
