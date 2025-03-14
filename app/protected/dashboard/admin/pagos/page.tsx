@@ -50,8 +50,14 @@ async function Page({
     }
     console.log(paginatedData)
   return (
-    <section className='flex flex-col gap-6 w-full p-10'>
-    <h1 className='px-28  font-bold text-4xl text-primary'>Pagos</h1>
+    <section className='flex flex-col gap-6 w-full md:p-10'>
+      <div className='flex flex-row gap-4'>
+      <h1 className='md:px-28  font-bold text-4xl text-primary'>Pagos</h1>
+      <div className={`${queryParams.error?"bg-red-300 text-white font-bold":queryParams.message?"bg-green-600 text-white font-bold":" hidden"}  py-2 px-4 rounded-lg `}>
+        <span className=''>{queryParams.error ?<>Error: {queryParams.error}</>: <>Mensaje: {queryParams.message}</>}</span>
+      </div>
+      </div>
+    
     <Table >
             <TableCaption>
               

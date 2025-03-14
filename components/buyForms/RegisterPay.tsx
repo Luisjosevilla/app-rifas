@@ -105,9 +105,9 @@ const schema = yup.object().shape({
             </div>
           
          
-            <button type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
+            <SubmitButton  type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
             Registrarte
-            </button>
+            </SubmitButton>
             <Toaster position='top-right'/>
         </form>
     );

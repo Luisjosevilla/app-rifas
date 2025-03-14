@@ -1,15 +1,6 @@
-import { seeMonto, selectMethod, signUpAction } from "@/app/actions";
+
 import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { SmtpMessage } from "../smtp-message";
-import { ArrowLeft, RotateCw, Ticket } from "lucide-react";
-import { redirect } from "next/navigation";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createClient } from "@/utils/supabase/server";
-import { Checkbox } from "@/components/ui/checkbox";
 import RegisterPay from "@/components/buyForms/RegisterPay";
 import SeeMonto from "@/components/buyForms/SeeMonto";
 

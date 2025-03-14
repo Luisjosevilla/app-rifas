@@ -37,9 +37,6 @@ const {id} = await request.json()
 
     }
     
-        
-          
-
   return NextResponse.json({msj:"Verificado"})
 }
 

@@ -5,7 +5,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { ChevronRight, Gift, HandCoins, Home, Menu, Settings, Ticket } from "lucide-react";
+import { ChevronRight, Gift, HandCoins, Home, Menu, Settings, Ticket, Trophy } from "lucide-react";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
@@ -65,6 +65,7 @@ export default async function AuthButton() {
               <Link className="hover:opacity-70 text-lg font-bold flex flex-row justify-between"  href={`/protected/dashboard/admin`}><span className="flex flex-row gap-2" ><Home/>Inicio</span><span><ChevronRight/></span></Link>
               <Link className="hover:opacity-70 text-lg font-bold flex flex-row justify-between"  href={`/protected/dashboard/admin/pagos?page=0`}><span className="flex flex-row gap-2" ><HandCoins/>Pagos</span><span><ChevronRight/></span></Link>
               <Link  className="hover:opacity-70 text-lg font-bold flex flex-row justify-between" href={`/protected/dashboard/admin/config`}><span className="flex flex-row gap-2" ><Settings/>Ajustes</span><span><ChevronRight/></span></Link>
+              <Link  className="hover:opacity-70 text-lg font-bold flex flex-row justify-between" href={`/protected/dashboard/admin/top`}><span className="flex flex-row gap-2" ><Trophy/>Top compradores</span><span><ChevronRight/></span></Link>
               
               </div>
               :

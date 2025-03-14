@@ -1,12 +1,6 @@
-import { comprarUser, seeMonto, seeMontoUser, selectMethod } from '@/app/actions';
-import SeeMonto from '@/components/buyForms/SeeMonto';
+
 import UserBuyTicketsForm from '@/components/buyForms/UserBuyTicketForm';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createClient } from '@/utils/supabase/server';
-import Link from 'next/link';
 import React from 'react'
 
 async function Page(props: {
@@ -42,7 +36,7 @@ async function Page(props: {
 
   return (
     <section className='flex flex-row gap-4 '>
-        <div className="overflow-hidden relative flex flex-col w-full min-h-[80vh] gap-4 basis-1/2 mx-auto p-6 md:px-10 rounded-lg shadow-xl items-center">
+        <div className="overflow-hidden relative flex flex-col w-full min-h-[80vh] gap-4 md:basis-1/2 mx-auto p-6 md:px-10 rounded-lg shadow-xl items-center">
         {searchParams.error?
         <p className="w-full h-fit text-md text-red-600 bg-red-200 rounded-lg p-2"><span className="font-bold text-red-800">Error:</span> {searchParams.error}</p>
         :null} 

@@ -11,6 +11,7 @@ import * as yup from "yup";
 import { useRouter } from 'next/navigation';
 import { Clipboard } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import { SubmitButton } from '../submit-button';
 interface IFormInput {
   name: string;
   phone: number;
@@ -242,9 +243,9 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
             </div>
             
           </div>   
-        <button type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
+        <SubmitButton type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
         Comprar
-        </button>
+        </SubmitButton>
         
         </>
         

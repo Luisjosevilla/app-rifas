@@ -76,7 +76,7 @@ if(!(Number(formData.get("number"))>=4)){
       .update({ ntickets:[...profile[0].ntickets, ...numbersRifa] })
       .eq('id',  profile[0].id )
       .select();
-      console.log(profile)
+    
         
 
       const { data:payment, error:errorpayments } = await supabase
