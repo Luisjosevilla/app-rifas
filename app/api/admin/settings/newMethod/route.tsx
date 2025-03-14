@@ -4,12 +4,12 @@ import { createClient } from '../../../../../utils/supabase/server';
 
 export async function POST( request:NextRequest) {
 const supabase = await createClient();
-const {name, info,id} = await request.json()
+const {name, info,id,currency} = await request.json()
   
     const { data, error } = await supabase
     .from('method')
     .insert([
-    { name, info },
+    { name, info, currency },
     ])
     .select()
 

@@ -31,7 +31,7 @@ async function Page() {
     "use server";
     const getres = await fetch(`${process.env.URL}/api/admin/settings/newMethod`,{
       method:"POST",
-      body:JSON.stringify({id:data?.settings[0]?.id, name:e.get("name"),infodate:e.get("info")})})
+      body:JSON.stringify({id:data?.settings[0]?.id, name:e.get("name"),infodate:e.get("info"),currency:e.get("currency")})})
       let res= await  getres.json()
 
       if(getres.status!=200){
@@ -89,7 +89,7 @@ async function Page() {
             <Input name="name"  className="w-full" />
           </div>
           <div className="flex flex-col  gap-4">
-            <Label htmlFor="name" className="text-left text-lg font-bold">
+            <Label htmlFor="currency" className="text-left text-lg font-bold">
               Moneda
             </Label>
             <Input name="currency"  className="w-full" />

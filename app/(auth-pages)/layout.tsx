@@ -2,11 +2,23 @@ import Link from "next/link";
 import { hasEnvVars } from "../../utils/supabase/check-env-vars";
 import { EnvVarWarning } from "../../components/env-var-warning";
 import HeaderAuth from "../../components/header-auth";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+   const supabase = await createClient();
+      
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if(user){
+        redirect("/protected/dashboard/users")
+      }
   return (
     <>
       <nav className="w-full bg-background flex justify-center border-b border-b-foreground/10 h-18 relative  shadow-xl"  style={{"boxShadow": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"}}>

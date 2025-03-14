@@ -51,7 +51,7 @@ async function Page({
         <h3 className='text-xl font-bold text-foreground'>Numeros:</h3>
         <div className='flex flex-row flex-wrap w-full md:w-3/4 lg:w-1/2 gap-2'>
           {payments[0]?.numbers.map((n:any,i:number)=>{
-          return(<div key={i} className=' basis-1/4'><div className='flex items-center justify-center w-[80px] h-fit p-2 rounded-lg bg-primary text-white font-bold'>{n}</div></div>)
+          return(<div key={i} className=' basis-1/4'><div className='flex items-center justify-center w-[80px] h-fit p-2 rounded-lg bg-primary text-white font-bold'>{n.padStart(4, "0")}</div></div>)
           })}
         </div>
       </div>
