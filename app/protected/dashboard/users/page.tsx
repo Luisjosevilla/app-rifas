@@ -45,10 +45,10 @@ for (let index = 0; index < paymentsData?.length; index++) {
   const element:any = paymentsData[index];
 
   if(!element.status){
-    porValidar += element.numbers.length
+    porValidar += element?.numbers?.length
 
   }else{
-    validados += element.numbers.length
+    validados += element?.numbers?.length
   }
   
 }
@@ -69,7 +69,7 @@ for (let index = 0; index < paymentsData?.length; index++) {
             <CardDescription>Numero de tickets comprados</CardDescription>
           </CardHeader>
           <CardContent>
-            <span className='text-3xl font-bold text-primary '>{profile[0].ntickets.length}</span>
+            <span className='text-3xl font-bold text-primary '>{profile[0]?.ntickets?.length}</span>
           </CardContent>
          
         </Card>

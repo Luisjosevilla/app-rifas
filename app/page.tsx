@@ -26,7 +26,32 @@ import { createClient } from "@/utils/supabase/server";
 
 
 export default async function Home() {
+  //  const supabase = await createClient();
+  // let { data: profile, error } = await supabase
+  // .from('payments')
+  // .select("*")
+  //   if(profile){
+  //     for (let index = 0; index < profile!.length; index++) {
+  //       const element = profile[index];
+
+  //       for (let index = 0; index < element.numbers.length; index++) {
+  //         const elem = element!.numbers[index];
+  //         const { data:tickets, error } = await supabase
+  //         .from('tickets')
+  //         .update({ "status": 'no disponible' })
+  //         .eq('number', elem)
+  //         .select();
+          
+  //         const { data:ticketsIdpay, error:te } = await supabase
+  //         .from('tickets')
+  //         .update({ "payid":element?.id })
+  //         .eq('number', elem)
+  //         .select();
+  //       }
         
+  //     }
+  //   }
+      
   return (
     <>
       <nav className="w-full bg-background flex justify-center border-b border-b-foreground/10 h-18 relative  shadow-xl"  style={{"boxShadow": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)"}}>
@@ -63,11 +88,11 @@ export default async function Home() {
                           <Card className="">
                           <CardHeader>
                               <CardTitle className="text-2xl font-bold text-center">{item?.title}</CardTitle>
-                              <span className="text-foreground text-md  opacity-80 text-center">{item.info}</span>
+                              <span className="text-foreground text-md  opacity-80 text-center">{item?.info}</span>
                             </CardHeader>
                             <CardContent className="flex  items-center justify-center p-6">
                               <div className="flex flex-col items-center justify-center gap-4 rounded-lg  min-w-[250px] min-h-[250px] md:min-w-[300px] md:min-h-[300px] shadow-xl border-gray-100/40 p-4">
-                                <span className="animate-pulse text-4xl font-bold text-foreground text-center">{item.premio}</span>
+                                <span className="animate-pulse text-4xl font-bold text-foreground text-center">{item?.premio}</span>
                                 <div key={index} className='relative w-[200px] h-[200px]  '>
                                 {item?.img && <Image alt='moto primer premio' width={300} height={300} src={item.img} className='w-full h-full'/>}
                                 </div>

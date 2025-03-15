@@ -61,7 +61,7 @@ if(!(Number(formData.get("number"))>=4)){
       const response = await fetch(url, options);
       const data = await response.json();
       if (!data) return NextResponse.json({msj:"Error servidor"},{status:500});
- let { data: profile, error:errorprofile } = await supabase
+    let { data: profile, error:errorprofile } = await supabase
     .from('profile')
     .select('*')
     .eq("user_id", formData.get("user") )
@@ -88,13 +88,20 @@ if(!(Number(formData.get("number"))>=4)){
       .select();
 
     if (payment){
-      for (let index = 0; index < payment[0].numbers.length; index++) {
-        const element = payment[0].numbers[index];
+      for (let index = 0; index < payment[0]?.numbers.length; index++) {
+        const element = payment[0]?.numbers[index];
         const { data:tickets, error } = await supabase
         .from('tickets')
-        .update({ "status": 'no disponible',payid:payment[0].id })
+        .update({ "status": 'no disponible' })
         .eq('number', element)
-        .select()
+        .select();
+        
+        const { data:ticketsIdpay, error:te } = await supabase
+        .from('tickets')
+        .update({ "payid":payment[0]?.id })
+        .eq('number', element)
+        .select();
+
         if(error){
             return NextResponse.json({msj:"ha ocurrido un error al guardar los tickets"},{status:500})
         }

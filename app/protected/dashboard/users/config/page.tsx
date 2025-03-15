@@ -33,7 +33,7 @@ if(!profile){
       </div>
       <div className='flex flex-col gap-2'>
         <h4 className='text-xl font-bold'>Estado: </h4>
-        <span>{profile[0]?.ntickets.length >0 ?"Participando":"No participando"}</span> 
+        <span>{profile[0]?.ntickets?.length >0 ?"Participando":"No participando"}</span> 
       </div>
     </section>
   )

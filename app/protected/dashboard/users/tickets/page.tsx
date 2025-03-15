@@ -27,7 +27,7 @@ const supabase = await createClient();
 
     }
 
-    const startIndex = "page" in queryParams && queryParams.page ? (Number(queryParams.page) * 10): 0;
+    const startIndex = "page" in queryParams && queryParams?.page ? (Number(queryParams?.page) * 10): 0;
     const endIndex = startIndex + 10;
     const paginatedData = data?.slice(startIndex, endIndex);
   return (

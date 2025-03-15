@@ -23,7 +23,7 @@ const {id} = await request.json()
             
             const { data, error } = await supabase
             .from('tickets')
-            .update({ status: 'no disponible' , payid:payments[0].id})
+            .update({ status: 'no disponible'})
             .eq('number', payments[0].numbers[index])
             .select()
         

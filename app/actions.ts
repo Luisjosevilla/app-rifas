@@ -263,8 +263,8 @@ export const CancelarPago= async (formData:FormData) => {
     return  redirect(`/protected/dashboard/admin/pagos/verify/${id}?error=${encodeURIComponent("error del servidor intente de nuevo")}`) 
   
   }
-  for (let index = 0; index < data[0].numbers.length; index++) {
-    const element = data[0].numbers[index];
+  for (let index = 0; index < data[0]?.numbers?.length; index++) {
+    const element = data[0]?.numbers[index];
     const { data:tickets, error } = await supabase
     .from('tickets')
     .update({ "status": 'disponible' ,payid:null})
@@ -273,7 +273,7 @@ export const CancelarPago= async (formData:FormData) => {
 
     const {  error:errorupdate } = await supabase
       .from('profile')
-      .update({ ntickets:profile[0].ntickets.filter((e:any)=>e==element).length<4?[]:profile[0].ntickets.filter((e:any)=>e==element)})
+      .update({ ntickets:profile[0]?.ntickets?.filter((e:any)=>e==element).length<4?[]:profile[0].ntickets.filter((e:any)=>e==element)})
       .eq('user_id',  data[0].user )
       .select();
 
@@ -288,8 +288,8 @@ export const CancelarPago= async (formData:FormData) => {
   .eq('id', id)
 
   if(paymentDeleteErr){
-    for (let index = 0; index < data[0].numbers.length; index++) {
-      const element = data[0].numbers[index];
+    for (let index = 0; index < data[0]?.numbers?.length; index++) {
+      const element = data[0]?.numbers[index];
       const { data:tickets, error } = await supabase
       .from('tickets')
       .update({ "status": 'no disponible',payid:data[0]?.id })
@@ -299,7 +299,7 @@ export const CancelarPago= async (formData:FormData) => {
       const {  error:errorupdate } = await supabase
       .from('profile')
       .update({ ntickets:profile[0].ntickets.filter((e:any)=>e==element)})
-      .eq('id',  data[0].user )
+      .eq('id',  data[0]?.user )
       .select();
       if(error|| errorupdate)return redirect(`/protected/dashboard/admin/pagos/verify/${id}?error=${encodeURIComponent("error al cambiar estado de tickets, intente de nuevo")}`) 
       
@@ -314,8 +314,8 @@ export const CancelarPago= async (formData:FormData) => {
 
 };
 
-export const buscarGanador=()=>{
-  
+export const buscarGanador=async ()=>{
+
 }
 
 
