@@ -40,6 +40,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
   const router = useRouter()
 
   const [file,setFile]=useState<File>()
+  const [sender,setsender]=useState<boolean>()
   const {
     register,
     handleSubmit,
