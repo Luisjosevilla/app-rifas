@@ -92,7 +92,11 @@ const Page = async ({
                 </form>
             </div>
             <div className='w-full h-fit justify-center '>
+               {Qparams?.error?
                 <span className='p-2 rounded-lg w-fit h-fit bg-red-300 text-red-700 text-lg font-bold'>{Qparams?.error}</span>
+                :null
+
+               } 
                 
             </div>
             
