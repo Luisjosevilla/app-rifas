@@ -18,7 +18,8 @@ export async function GET( request:NextRequest) {
         .from('settings')
         .select("*")
         if(!settings) return null;
-        return {price: settings[0].price, tasa:resTasa.promedio,monto:2 }
+
+        return {price: settings[0].price, tasa:settings[0].d_paralelo?resTasa.promedio:settings[0].dolar,monto:2 }
             
       }
     

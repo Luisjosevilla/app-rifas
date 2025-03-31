@@ -6,6 +6,8 @@ import { Textarea } from '../../../../../components/ui/textarea'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../../../../components/ui/dialog'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { Switch } from '@/components/ui/switch'
+import { createClient } from '@/utils/supabase/server'
 
 
 
@@ -17,7 +19,7 @@ async function Page() {
     "use server";
     const getres = await fetch(`${process.env.URL}/api/admin/settings/edit`,{
       method:"POST",
-      body:JSON.stringify({id:data?.settings[0]?.id, price:e.get("price"),date:e.get("fecha")})})
+      body:JSON.stringify({id:data?.settings[0]?.id, price:e.get("price"),date:e.get("fecha"), dolar:e.get("dolar")})})
       let res= await  getres.json()
 
       if(getres.status!=200){
@@ -55,6 +57,19 @@ async function Page() {
       revalidatePath("/protected/dashboard/admin/config")
 
   }
+
+  async function update4(e:boolean){
+    "use server";
+      const supabase = await createClient();
+      const { data, error } = await supabase
+      .from('settings')
+      .update({ d_paralelo:e})
+      .eq('id', 1)
+      .select()
+      
+      revalidatePath("/protected/dashboard/admin/config")
+
+  }
   return (
     <section className='flex flex-col p-10 items-start justify-end w-full gap-4 '>
       
@@ -62,12 +77,21 @@ async function Page() {
 
       <form action={update} className='flex flex-col gap-2 md:w-3/4 lg:w-1/2 w-full '>
         <div className='flex flex-col gap-2 p-4 '>
-          <Label> Fecha de la rifa</Label>
+          <Label>Fecha de la rifa</Label>
           <Input name='fecha' type='date' defaultValue={data?.settings[0]?.date}/>
         </div>
         <div className='flex flex-col gap-2 p-4'>
-          <Label>Precio por tickets</Label>
-          <Input name='price' defaultValue={data?.settings[0]?.price}/>
+          <Label>Utilizar dolar paralelo</Label>
+          <Switch name='d_paralelo' onCheckedChange={update4} checked={data?.settings[0]?.d_paralelo}/>
+        </div>
+        <div className='flex flex-col gap-2 p-4 '>
+          <Label>Tasa de cambio $</Label>
+          <Input name='dolar' type='number' disabled={data?.settings[0]?.d_paralelo} step={"any"} defaultValue={data?.settings[0]?.dolar}/>
+        </div>
+        
+        <div className='flex flex-col gap-2 p-4'>
+          <Label>Precio por tickets en $</Label>
+          <Input name='price'  defaultValue={data?.settings[0]?.price}/>
         </div>
         <Button type='submit' className='text-white bg-primary font-bold text-lg rounded-lg w-fit h-fit p-2 '> Guardar cambios</Button>
       </form>

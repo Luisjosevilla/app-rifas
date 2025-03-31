@@ -17,11 +17,10 @@ interface IFormInput {
    password:string;
    terms:boolean
 }
-const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 
 const schema = yup.object().shape({
   email: yup.string().required("Nombre completo es requerido"),
-  password:yup.string().matches(passwordRules, { message: "Contraseña tiene que tener minimo un 1 caracter en mayúscula, 1 caracter en minúscula y 1 número." }).required("Contraseña es requerida"),
+  password:yup.string().min( 6,"Minimo 6 caracteres").required("Contraseña es requerida"),
   terms:yup.boolean().required("Se tiene que aceptar los terminos y condiciones")
 });
  const RegisterPay = ({searchParams}:{searchParams:any}) => {
@@ -80,7 +79,7 @@ const schema = yup.object().shape({
             <Input   {...register("email")} placeholder="you@example.com" required />
         </div> 
         <div className='flex flex-col gap-2 w-full md:w-3/4'>
- <span className='text-red-600 text-xs '>{errors.password?.message}</span>
+           <span className='text-red-600 text-xs '>{errors.password?.message}</span>
           <Label htmlFor="password">Contraseña</Label>
           <Input
             type="password"
