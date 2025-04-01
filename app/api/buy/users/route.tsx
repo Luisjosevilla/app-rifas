@@ -74,7 +74,7 @@ if(!(Number(formData.get("number"))>=4)){
       
       const {  error:errorupdate } = await supabase
       .from('profile')
-      .update({ ntickets:[...profile[0].ntickets, ...numbersRifa] })
+      .update({ ntickets:[...new Set([...profile[0].ntickets, ...numbersRifa])]})
       .eq('id',  profile[0].id )
       .select();
     
@@ -113,3 +113,4 @@ if(!(Number(formData.get("number"))>=4)){
     return NextResponse.json({msj:"Error servidor"},{status:500});
 }
 }
+ 

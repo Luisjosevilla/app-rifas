@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../../../../components/ui/table';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '../../../../components/ui/pagination';
 import Link from 'next/link';
+import { SubmitButton } from '@/components/submit-button';
+import {arr } from "../../../actions"
 
 export const dynamic = 'force-dynamic'
 
@@ -29,9 +31,12 @@ async function Page() {
       }
     const getData = await fetch(`${process.env.URL}/api/admin/getData`,{method:"GET"})
       const data = await  getData?.json()
+
+      
   return (
     <section className='flex flex-col gap-6 w-full'>
        <h1 className='px-28  font-bold text-4xl text-slate-700'>Inicio</h1>
+     
         <div className='flex flex-col md:flex-row gap-4 w-full items-center justify-center '>
         <Card className="w-full md:basis-1/4">
           <CardHeader>

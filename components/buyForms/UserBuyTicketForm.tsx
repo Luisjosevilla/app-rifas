@@ -40,7 +40,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
   const router = useRouter()
 
   const [file,setFile]=useState<File>()
-  const [sender,setsender]=useState<boolean>()
+  const [sender,setsender]=useState<boolean>(false)
   const {
     register,
     handleSubmit,
@@ -59,6 +59,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
   }});
 
   const onSubmit = async (data: IFormInput) => {
+    setsender(e=>e=true)
     
     if(!data.terms){
       setError("terms",{message:"Tienes que aceptar los terminos y condiciones"})
@@ -87,6 +88,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
       
       toast.success("Se han cargado sus datos, pronto será redireccionado para coontinuar con el proceso!.")
       setTimeout(()=>{
+        setsender(e=>e=false)
         router.push(`/sign-up?number=${encodeURIComponent(data.number!)}&nt=${data.transfer!}&method=${encodeURIComponent(data.method!)}&monto=${searchParams?.monto}&img=${res?.img}&phone=${getValues("phone")}&cedula=${data.cedula!}&name=${data.name!}&step=register`)
       },2000)
       
@@ -244,7 +246,7 @@ const UserBuyTicketsForm= ({searchParams,methods,userData}:{searchParams:any,met
             </div>
             
           </div>   
-        <SubmitButton pendingText='Comprando...' type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
+        <SubmitButton pendingText='Comprando...' disabled={sender} type="submit" className="p-2 px-4 w-fit h-fit bg-primary text-primary-foreground font-bold rounded-lg hover:scale-105">
         Comprar
         </SubmitButton>
         

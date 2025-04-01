@@ -315,6 +315,31 @@ export const CancelarPago= async (formData:FormData) => {
 };
 
 
+export const arr=async()=>{
+  const supabase = await createClient();
+        let { data: payments, error } = await supabase
+        .from('payments')
+        .select("*")
 
+        payments?.forEach(async (data)=>{
+          
+              let { data: profileD } = await supabase
+              .from('profile')
+              .select("*")
+              .eq('user_id', data?.user)
+
+              if(!profileD){
+                return;
+              }
+          
+            const { data:profileU, error } = await supabase
+            .from('profile')
+            .update({ "ntickets": [...new Set([...data?.numbers,...profileD[0].ntickets])] })
+            .eq('user_id', data?.user)
+            .select()
+        
+        })
+
+      }
 
 
