@@ -10,6 +10,7 @@ const supabase = await createClient();
     let { data: payments, error:errorPayments } = await supabase
     .from('payments')
     .select('*')
+    .order('id', { ascending: false });
 
     if( errorPayments){
         const msj= errorPayments

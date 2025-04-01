@@ -96,7 +96,7 @@ async function Page({
                 </TableRow>
               </TableHeader>
               <TableBody>
-               {paginatedData?.reverse()?.map(async (items:any,index:number)=>{
+               {paginatedData?.map(async (items:any,index:number)=>{
                 return  <TableRow key={index} >
                 <TableCell className="font-medium min-w-[200px] text-center">{items?.id}</TableCell>
                 <TableCell className="font-medium  text-center">{(await getUser(items?.user))?.name}</TableCell>

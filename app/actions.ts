@@ -329,7 +329,7 @@ export const arr=async()=>{
               .eq('user_id', data?.user)
 
               if(!profileD){
-                return;
+                return console.log("error");
               }
           
             const { data:profileU, error } = await supabase
@@ -340,6 +340,8 @@ export const arr=async()=>{
         
         })
 
-      }
+      redirect(`/protected/dashboard/admin/top?update=${Math.round(Math.random()*100000)}`)
+
+}
 
 
