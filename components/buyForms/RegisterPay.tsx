@@ -73,6 +73,8 @@ const schema = yup.object().shape({
     return (
         <form onSubmit={handleSubmit(onSubmit)}  className='flex flex-col gap-4 items-center justify-center'>
           {error!== "" ? <span className='text-red-600 text-md'>{error}</span>:null}
+
+          <span className='text-md text-foreground font-bold text-center'>Agrega un correo y contraseña e inicia sesión para ver los números que le tocaron en la sección de tickets 👀</span>
         <div className='flex flex-col gap-2 w-full md:w-3/4'>
          <span className='text-red-600 text-xs '>{errors.email?.message}</span>
             <Label htmlFor="email">Correo</Label>

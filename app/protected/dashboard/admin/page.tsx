@@ -13,22 +13,7 @@ import {arr } from "../../../actions"
 export const dynamic = 'force-dynamic'
 
 async function Page() {
-      const supabase = await createClient();
-        
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        
-      let { data: profile, error } = await supabase
-      .from('profile')
-      .select("*")
-      .eq('user_id', user?.id)
-              
-      if(profile !== null ){
-          if(profile[0]?.rol !=="admin"){
-             return redirect("/protected/dashboard/users")
-          }
-      }
+      
     const getData = await fetch(`${process.env.URL}/api/admin/getData`,{method:"GET"})
       const data = await  getData?.json()
 

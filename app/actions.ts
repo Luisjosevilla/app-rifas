@@ -331,7 +331,6 @@ export const arr=async()=>{
               if(!profileD){
                 return console.log("error");
               }
-          
             const { data:profileU, error } = await supabase
             .from('profile')
             .update({ "ntickets": [...new Set([...data?.numbers,...profileD[0].ntickets])] })

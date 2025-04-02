@@ -20,14 +20,7 @@ async function Page() {
   .select("*")
   .eq('user_id', user?.id)
 
-   if(!profile){
-    return redirect("/sign_in")
-   }     
-  if(profile !== null ){
-      if(profile[0]?.rol == "admin"){
-         return redirect("/protected/dashboard/admin")
-      }
-  }
+ 
 
   
 let { data: paymentsData, error:errorPayments} = await supabase
@@ -39,7 +32,7 @@ let porValidar=0;
 let validados=0;
 
 if(!paymentsData){
-  return redirect("/sign_in")
+  return redirect("/protected/dashboard/users/buy")
  }    
 for (let index = 0; index < paymentsData?.length; index++) {
   const element:any = paymentsData[index];
@@ -69,7 +62,7 @@ for (let index = 0; index < paymentsData?.length; index++) {
             <CardDescription>Numero de tickets comprados</CardDescription>
           </CardHeader>
           <CardContent>
-            <span className='text-3xl font-bold text-primary '>{profile[0]?.ntickets?.length}</span>
+            <span className='text-3xl font-bold text-primary '>{profile && profile[0]?.ntickets?.length}</span>
           </CardContent>
          
         </Card>
