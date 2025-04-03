@@ -6,13 +6,16 @@ export  default async function DashboardLayout({
   }: {
     children: React.ReactNode
   }) {
-    
-          
-   const supabase = await createClient();
+
+
+    let redirectPath: string | null = null
+
+    try {
+      const supabase = await createClient();
       
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await supabase?.auth?.getUser();
       
     let { data: profile, error } = await supabase
     .from('profile')
@@ -20,16 +23,26 @@ export  default async function DashboardLayout({
     .eq('user_id', user?.id)
   
      if(!profile){
-      return redirect("/sign_in")
+      redirectPath ="/sign_in";
      }     
     if(profile !== null ){
         if(profile[0]?.rol == "admin"){
-           return redirect("/protected/dashboard/admin")
+          redirectPath = "/protected/dashboard/admin";
+        
         }
     }
-  
-    
-    return (
+        
+    } catch (error) {
+        //Rest of the code
+        console.log(error)
+        redirectPath = `/`
+    } finally {
+        //Clear resources
+        if (redirectPath)
+            redirect(redirectPath)
+    }
+          
+  return (
     <>
         {children}
     </>
