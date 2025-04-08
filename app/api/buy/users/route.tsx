@@ -20,8 +20,8 @@ const getNumbers= async (number:number,name:string)=>{
     return numbers
 }
 
-if(!(Number(formData.get("number"))>=4)){
-      return NextResponse.json({msj:"Error número de tickets menor que 4"},{status:500})
+if(!(Number(formData.get("number"))>=2)){
+      return NextResponse.json({msj:"Error número de tickets menor que 2"},{status:500})
     }
     if(!formData.get("transfer")){
       return NextResponse.json({msj:"Error numero de transferencia"},{status:500})

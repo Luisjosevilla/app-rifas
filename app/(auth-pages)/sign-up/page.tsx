@@ -66,7 +66,7 @@ export default async function Signup(props: {
               
             </tbody>
           </table>
-      {searchParams.step =="register"&&(Number(searchParams.number)>=4) && searchParams.method != undefined?
+      {searchParams.step =="register"&&(Number(searchParams.number)>=2) && searchParams.method != undefined?
       <RegisterPay searchParams={searchParams}/>:
       <SeeMonto searchParams={searchParams} methods={methods} />
       }
