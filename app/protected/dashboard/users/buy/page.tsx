@@ -21,7 +21,7 @@ async function Page(props: {
       .from('settings')
       .select("*")
       if(!settings) return null;
-      return {price: settings[0].price, tasa:resTasa.promedio+1,monto:2 }
+      return {price: settings[0].price, tasa:resTasa.promedio+1,monto:1 }
           
   }
 

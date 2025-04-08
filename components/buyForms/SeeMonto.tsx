@@ -91,7 +91,7 @@ const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
 
   const seeMonto=async ()=>{
     if(Number(getValues("number"))<2){
-        return setError("number",{message:"Número tiene que ser mayor que 2"})
+        return setError("number",{message:"Número tiene que ser igual o mayor que 2"})
     }
     if(!getValues("method")){
         return setError("method",{message:"Metodo de pago es requerido!"})

@@ -23,7 +23,7 @@ export async function GET( request:NextRequest) {
             
       }
     
-    if(!searchParams.get("method") || !searchParams.get("number") || !(Number(searchParams.get("number") )>=4)) {
+    if(!searchParams.get("method") || !searchParams.get("number") || !(Number(searchParams.get("number") )>=2)) {
         return  NextResponse.json({msj:"Error en peticion"},{status:500})
     }
         let { data: methods, error:errormethod } = await supabase
