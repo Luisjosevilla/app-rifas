@@ -34,7 +34,11 @@ if( !count){
         .from('tickets')
         .select("*")
         .eq('number', "7777")
-        datanumber.push(data[0])
+        if(!datat){
+          datanumber.push(data[Math.round(Math.random()*data.length)])
+        }else{
+          datanumber.push(datat[0])
+        }     
       }else{
         datanumber.push(data[Math.round(Math.random()*data.length)])
       }
