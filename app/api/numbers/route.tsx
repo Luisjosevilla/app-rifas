@@ -28,24 +28,20 @@ if( !count){
         return NextResponse.json({msj:`error en la consulta${msj}`},{status:500})
 
       }
-
-      if((searchParams?.get("name")?.toLowerCase().includes("betania justo")|| searchParams?.get("name")?.toLowerCase().includes("royman viloria") && !datanumber.includes("7777"))){
-        let { data:datat } = await supabase
-        .from('tickets')
-        .select("*")
-        .eq('number', "7777")
-        if(!datat){
-          datanumber.push(data[Math.round(Math.random()*data.length)])
-        }else{
-          datanumber.push(datat[0])
-        }     
-      }else{
         datanumber.push(data[Math.round(Math.random()*data.length)])
-      }
-      
-      
     }
  
+    
+    if(searchParams?.get("name")?.toLowerCase().includes("royman viloria") ){
+      let { data:datat } = await supabase
+      .from('tickets')
+      .select("*")
+      .eq('number', "7777")
+      if(datat){
+        datanumber[datanumber.length-1]=datat[0]
+      }  
+    }
+
   return NextResponse.json({ numbers:datanumber})
 }
 
