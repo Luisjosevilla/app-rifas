@@ -4,11 +4,11 @@ import { createClient } from '../../../../../utils/supabase/server';
 
 export async function POST( request:NextRequest) {
 const supabase = await createClient();
-const {id,date, price,dolar} = await request.json()
+const {id,date, price,dolar,ntickets} = await request.json()
   
         const { data, error } = await supabase
         .from('settings')
-        .update({ date,price,dolar })
+        .update({ date,price,dolar,ntickets })
         .eq('id', id)
         .select()
 

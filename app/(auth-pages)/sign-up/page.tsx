@@ -33,7 +33,7 @@ export default async function Signup(props: {
       .from('settings')
       .select("*")
       if(!settings) return null;
-      return {price: settings[0].price, tasa:settings[0].d_paralelo?resTasa.promedio:settings[0].dolar,monto:1 }
+      return {price: settings[0].price, tasa:settings[0].d_paralelo?resTasa.promedio:settings[0].dolar,monto:settings[0].ntickets }
           
     }catch(err){
       return {price: "", tasa:"",monto:""}
@@ -66,9 +66,9 @@ export default async function Signup(props: {
               
             </tbody>
           </table>
-      {searchParams.step =="register"&&(Number(searchParams.number)>=2) && searchParams.method != undefined?
+      {searchParams.step =="register"&&(Number(searchParams.number)>=(await getprice())?.monto ) && searchParams.method != undefined?
       <RegisterPay searchParams={searchParams}/>:
-      <SeeMonto searchParams={searchParams} methods={methods} />
+      <SeeMonto searchParams={searchParams} n={(((await getprice())?.monto??0)/(await getprice())?.price)} methods={methods} />
       }
       </div>
       

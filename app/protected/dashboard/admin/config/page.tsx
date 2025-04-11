@@ -19,7 +19,7 @@ async function Page() {
     "use server";
     const getres = await fetch(`${process.env.URL}/api/admin/settings/edit`,{
       method:"POST",
-      body:JSON.stringify({id:data?.settings[0]?.id, price:e.get("price"),date:e.get("fecha"), dolar:e.get("dolar")})})
+      body:JSON.stringify({id:data?.settings[0]?.id, price:e.get("price"),date:e.get("fecha"), dolar:e.get("dolar"),ntickets:e.get("ntickets")})})
       let res= await  getres.json()
 
       if(getres.status!=200){
@@ -87,6 +87,10 @@ async function Page() {
         <div className='flex flex-col gap-2 p-4 '>
           <Label>Tasa de cambio $</Label>
           <Input name='dolar' type='number' disabled={data?.settings[0]?.d_paralelo} step={"any"} defaultValue={data?.settings[0]?.dolar}/>
+        </div>
+        <div className='flex flex-col gap-2 p-4 '>
+          <Label>Número de compra minima en dolares</Label>
+          <Input name='ntickets' type='number'  defaultValue={data?.settings[0]?.ntickets}/>
         </div>
         
         <div className='flex flex-col gap-2 p-4'>

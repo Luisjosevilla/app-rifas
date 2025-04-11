@@ -22,21 +22,23 @@ interface IFormInput {
   monto?:number;
   terms:boolean;
 }
-const schema = yup.object().shape({
-  name: yup.string().required("Nombre completo es requerido"),
-  cedula:yup.number().required("Cédula es requerida").typeError('Debe ser un número'),
-  phone: yup
-    .number()
-    .typeError('Debe ser un número')
-    .min(4,"Número no valido")
-    .required("Número de teléfono es requerido"),
-  transfer:yup.number().typeError('Debe ser un número').min(4,"Número no valido").required("Número de transferencia es requerido"),
-  number:yup.number().typeError('Debe ser un número').min(2,"El número de tickets tiene que ser igual o mayor a 2").required("Número de tickets es requerido"),
-  method:yup.string().required("Método es requerido"),
-  monto:yup.number(),
-  terms: yup.boolean().required("Los términos y condiciones son requeridos")
-});
-const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
+
+const SeeMonto = ({n,searchParams,methods}:{n:any,searchParams:any,methods:any}) => {
+
+  const schema = yup.object().shape({
+    name: yup.string().required("Nombre completo es requerido"),
+    cedula:yup.number().required("Cédula es requerida").typeError('Debe ser un número'),
+    phone: yup
+      .number()
+      .typeError('Debe ser un número')
+      .min(4,"Número no valido")
+      .required("Número de teléfono es requerido"),
+    transfer:yup.number().typeError('Debe ser un número').min(4,"Número no valido").required("Número de transferencia es requerido"),
+    number:yup.number().typeError('Debe ser un número').min(n??2,`El número de tickets tiene que ser igual o mayor a ${n??2}`).required("Número de tickets es requerido"),
+    method:yup.string().required("Método es requerido"),
+    monto:yup.number(),
+    terms: yup.boolean().required("Los términos y condiciones son requeridos")
+  });
   const router = useRouter()
 
   const [file,setFile]=useState<File>()
@@ -91,7 +93,7 @@ const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
 
   const seeMonto=async ()=>{
     if(Number(getValues("number"))<2){
-        return setError("number",{message:"Número tiene que ser igual o mayor que 2"})
+        return setError("number",{message:`Número tiene que ser igual o mayor que ${n??2}`})
     }
     if(!getValues("method")){
         return setError("method",{message:"Metodo de pago es requerido!"})
@@ -111,7 +113,7 @@ const SeeMonto = ({searchParams,methods}:{searchParams:any,methods:any}) => {
          
           <div className="flex flex-col gap-2 items-center justify-center w-full h-fit">
               <span className='text-xs text-red-600 '>{errors?.number?.message}</span>
-              <label className="text-md text-foreground font-bold flex flex-col">Agregar cantidad de tickets a comprar<span className="text-xs text-foreground/60"> (tiene que ser mayor a 2 tickets)</span></label>
+              <label className="text-md text-foreground font-bold flex flex-col">Agregar cantidad de tickets a comprar<span className="text-xs text-foreground/60"> (tiene que ser mayor a {n??2} tickets)</span></label>
               <div className="flex flex-row gap-2 items-center justify-center">
                   <input type="number" {...register("number")} className={`border-2 border-primary/40 bg-transparent rounded-lg text-md p-2 w-[300px]`}/>
               </div>

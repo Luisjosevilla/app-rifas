@@ -60,7 +60,7 @@ async function Page(props: {
               
             </tbody>
           </table>
-         <UserBuyTicketsForm searchParams={searchParams} methods={methods ?? []} userData={profile && profile[0]}/>
+         <UserBuyTicketsForm searchParams={searchParams} methods={methods ?? []} n={(((await getprice())?.monto??0)/(await getprice())?.price)} userData={profile && profile[0]}/>
        
        </div>
     </section>

@@ -19,9 +19,14 @@ const getNumbers= async (number:number,name:string)=>{
   
     return numbers
 }
+let { data: settings, error } = await supabase
+.from('settings')
+.select("*")
+if(!settings) return NextResponse.json({msj:"Error servidor"},{status:500});
 
-if(!(Number(formData.get("number"))>=2)){
-      return NextResponse.json({msj:"Error número de tickets menor que 2"},{status:500})
+
+if(!(Number(formData.get("number"))>=settings[0].ntickets)){
+      return NextResponse.json({msj:`Error número de tickets menor que ${settings[0].ntickets}`},{status:500})
     }
     if(!formData.get("transfer")){
       return NextResponse.json({msj:"Error numero de transferencia"},{status:500})
