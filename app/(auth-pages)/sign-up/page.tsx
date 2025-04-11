@@ -66,7 +66,7 @@ export default async function Signup(props: {
               
             </tbody>
           </table>
-      {searchParams.step =="register"&&(Number(searchParams.number)>=(await getprice())?.monto ) && searchParams.method != undefined?
+      {searchParams.step =="register"&&(Number(searchParams.number)>=(((await getprice())?.monto??0)/(await getprice())?.price)) && searchParams.method != undefined?
       <RegisterPay searchParams={searchParams}/>:
       <SeeMonto searchParams={searchParams} n={(((await getprice())?.monto??0)/(await getprice())?.price)} methods={methods} />
       }

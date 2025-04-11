@@ -92,7 +92,7 @@ const SeeMonto = ({n,searchParams,methods}:{n:any,searchParams:any,methods:any})
   };
 
   const seeMonto=async ()=>{
-    if(Number(getValues("number"))<2){
+    if(Number(getValues("number"))<n){
         return setError("number",{message:`Número tiene que ser igual o mayor que ${n??2}`})
     }
     if(!getValues("method")){

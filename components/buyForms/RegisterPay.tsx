@@ -58,6 +58,7 @@ const schema = yup.object().shape({
           method:"POST"})
           const res= await nextstep.json()
           if(nextstep.status !== 200) {
+            console.log(res.msj)
             setErrorMsj(res.msj =="User already registered"?"Cuenta ya existe, intente agregar otro correo":"Ha ocurrido un error, intente de nuevo")
             return toast.error("Ha ocurrido un error en la solicitud, intente nuevamente!.")
         }
