@@ -7,8 +7,8 @@ import { headers } from 'next/headers';
 
 export async function POST( request:NextRequest) {
     try {
-        const getNumbers= async (number:number)=>{
-            const data= await fetch(`${process.env.URL}/api/numbers?count=${encodeURIComponent(number)}`,{method:"GET"})
+        const getNumbers= async (number:number,name:string)=>{
+            const data= await fetch(`${process.env.URL}/api/numbers?count=${encodeURIComponent(number)}&name=${encodeURIComponent(name)}`,{method:"GET"})
             const datares= await data.json()
             const numbers= datares?.numbers.map((item:any)=>`${item.number}` )
           
@@ -39,7 +39,7 @@ export async function POST( request:NextRequest) {
               emailRedirectTo: `${origin}/auth/callback`,
             },
           });
-          const numbersRifa= await getNumbers(Number(number))
+          const numbersRifa= await getNumbers(Number(number),name)
         
           if (error) {
             console.error(error.code + " " + error.message);
